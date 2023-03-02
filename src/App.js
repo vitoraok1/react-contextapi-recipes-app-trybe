@@ -1,13 +1,13 @@
 import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
-import Provider from './context/Provider';
 import './App.css';
 
 function App() {
   return (
-    <Provider>
-      <Login />
-    </Provider>
+    <Switch>
+      <Route exact path="/" component={ Login } />
+    </Switch>
   );
 }
 
