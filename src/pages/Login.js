@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-export default function Login() {
+function Login({ history }) {
   const [userEmail, setUserEmail] = useState('');
   const [userPassWord, setUserPassWord] = useState('');
   const [isEnterBtnDisabled, setEnterBtnDisabled] = useState(true);
@@ -29,6 +30,11 @@ export default function Login() {
     }
   };
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    localStorage.setItem('user', JSON.stringify({ email: userEmail }));
+  };
+
   return (
     <div>
       <form>
@@ -50,6 +56,7 @@ export default function Login() {
           type="button"
           data-testid="login-submit-btn"
           disabled={ isEnterBtnDisabled }
+          onClick={ handleClick }
         >
           Enter
 
@@ -58,3 +65,9 @@ export default function Login() {
     </div>
   );
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({}),
+}.isRequired;
+
+export default Login;
