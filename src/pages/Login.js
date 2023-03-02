@@ -33,10 +33,13 @@ function Login({ history }) {
   const handleClick = (event) => {
     event.preventDefault();
     localStorage.setItem('user', JSON.stringify({ email: userEmail }));
+    history.push('/meals');
   };
 
   return (
     <div>
+      <h1>Recipes App</h1>
+      <h2>Login</h2>
       <form>
         <input
           type="email"
