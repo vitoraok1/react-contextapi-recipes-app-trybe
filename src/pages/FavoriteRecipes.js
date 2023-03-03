@@ -1,13 +1,12 @@
 import React from 'react';
 import Header from '../components/Header';
 
-export default function Meals() {
+function FavoriteRecipes() {
   return (
     <div>
       <Header />
-      <h1>
-        Meals
-      </h1>
     </div>
   );
 }
+
+export default FavoriteRecipes;
