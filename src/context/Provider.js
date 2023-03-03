@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import Context from './Context';
 import {
   getDrinksData,
-  getMealsData, getMealsCategory, getDrinksCategory } from '../api/drinksAndMeals';
+  getMealsData,
+  getMealsCategory,
+  getDrinksCategory } from '../api/drinksAndMeals';
 
 function Provider({ children }) {
   const [drinksData, setDrinksData] = useState([]);
@@ -46,6 +48,8 @@ function Provider({ children }) {
     mealsCategory,
     drinksData,
     mealsData,
+    setDrinksData,
+    setMealsData,
   }), [drinksCategory, mealsCategory, drinksData, mealsData]);
 
   return (

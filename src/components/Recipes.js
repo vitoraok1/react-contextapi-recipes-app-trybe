@@ -21,7 +21,6 @@ export default function Recipes() {
             />
             <h2 key={ strDrink } data-testid={ `${index}-card-name` }>{ strDrink }</h2>
           </div>
-
         ),
       )}
       ;
