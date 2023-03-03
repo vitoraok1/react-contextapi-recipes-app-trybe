@@ -5,9 +5,6 @@ function Drinks() {
   return (
     <div>
       <Header />
-      <h1>
-        Drinks
-      </h1>
     </div>
   );
 }

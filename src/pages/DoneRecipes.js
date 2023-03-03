@@ -5,9 +5,6 @@ function DoneRecipes() {
   return (
     <div>
       <Header />
-      <h1>
-        Done Recipes
-      </h1>
     </div>
   );
 }

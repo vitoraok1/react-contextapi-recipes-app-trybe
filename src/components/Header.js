@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
-import SearchBar from '../components/SearchBar';
+import SearchBar from './SearchBar';
 
 function Header() {
   const [pageName, setPageName] = useState('');
@@ -12,17 +12,16 @@ function Header() {
   const { pathname } = location;
 
   useEffect(() => {
-    const replace = pathname.replace('/', '');
-    const upperCaseReplace = replace[0].toUpperCase() + replace.substring(1);
+    const replaceWord = pathname.replace('/', '');
+    const upperCaseReplace = replaceWord
+      .charAt(0).toUpperCase() + replaceWord.substring(1);
 
-    if (pathname.includes('-')) {
-      const replace2 = pathname.replace('/', '');
-      const wordSlice = replace2.split('-');
+    if (replaceWord.includes('-')) {
+      const wordSlice = replaceWord.split('-');
       const firstWord = wordSlice[0];
       const secondWord = wordSlice[1];
-      const upperCaseFirstWord = firstWord[0].toUpperCase() + firstWord.substring(1);
-      const upperCaseSecondWord = secondWord[0].toUpperCase() + secondWord.substring(1);
-      const joinWords = `${upperCaseFirstWord} ${upperCaseSecondWord}`;
+      const joinWords = `${firstWord.charAt(0).toUpperCase() + firstWord.substring(1)}
+       ${secondWord.charAt(0).toUpperCase() + secondWord.substring(1)}`;
       setPageName(joinWords);
     } else setPageName(upperCaseReplace);
   }, [pathname]);
