@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import context from '../context/Context';
+import CategoryButton from './CategoryButton';
 
 export default function Recipes() {
   const { drinksData, mealsData } = useContext(context);
@@ -9,6 +10,7 @@ export default function Recipes() {
 
   const drinksCard = (
     <div>
+      <CategoryButton />
       {drinksData.slice(0, maxCards).map(
         ({ strDrink, strDrinkThumb }, index) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
@@ -27,6 +29,7 @@ export default function Recipes() {
   );
   const mealsCard = (
     <div>
+      <CategoryButton />
       {mealsData.slice(0, maxCards).map(
         ({ strMeal, strMealThumb }, index) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>

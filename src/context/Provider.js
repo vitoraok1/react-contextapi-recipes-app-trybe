@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
-import { getDrinksData, getMealsData } from '../api/drinksAndMeals';
+import {
+  getDrinksData,
+  getMealsData, getMealsCategory, getDrinksCategory } from '../api/drinksAndMeals';
 
 function Provider({ children }) {
   const [drinksData, setDrinksData] = useState([]);
   const [mealsData, setMealsData] = useState([]);
+  const [drinksCategory, setDrinksCategory] = useState([]);
+  const [mealsCategory, setMealsCategory] = useState([]);
 
   useEffect(
     () => {
@@ -22,10 +26,27 @@ function Provider({ children }) {
     },
     [],
   );
+  useEffect(
+    () => {
+      const mealsCategoryApi = async () => {
+        const result = await getMealsCategory();
+        setMealsCategory(result);
+      };
+      const drinksCategoryApi = async () => {
+        const result = await getDrinksCategory();
+        setDrinksCategory(result);
+      };
+      mealsCategoryApi();
+      drinksCategoryApi();
+    },
+    [],
+  );
   const context = useMemo(() => ({
+    drinksCategory,
+    mealsCategory,
     drinksData,
     mealsData,
-  }), [drinksData, mealsData]);
+  }), [drinksCategory, mealsCategory, drinksData, mealsData]);
 
   return (
     <Context.Provider value={ context }>
