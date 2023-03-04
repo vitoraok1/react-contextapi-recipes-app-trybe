@@ -2,26 +2,12 @@ import React from 'react';
 import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
-import Meals from '../pages/Meals';
 import App from '../App';
 
 const BUTTON_PROFILE = 'profile-top-btn';
 const BUTTON_SEARCH = 'search-top-btn';
 const FAVORITE_LINK = '/favorite-recipes';
 const DRINKS_LINK = '/drinks';
-
-describe('1. Testes no componente Header', () => {
-  it('1.2 Verifica se a tela refeições favoritas possui os botões', () => {
-    const { history } = renderWithRouter(<App />);
-
-    act(() => history.push(FAVORITE_LINK));
-
-    const profileButton = screen.getByTestId(BUTTON_PROFILE);
-    const pageTitle = screen.getByTestId('page-title');
-
-    expect(profileButton).toBeInTheDocument();
-    expect(pageTitle).toHaveTextContent('Favorite Recipes');
-=======
 
 describe('1. Testes no componente Header', () => {
   it('1.2 Verifica se a tela refeições favoritas possui o nome da página', async () => {
@@ -55,7 +41,7 @@ describe('1. Testes no componente Header', () => {
     expect(profileButton).toBeInTheDocument();
     expect(searchButton).toBeInTheDocument();
     expect(pageTitle).toHaveTextContent('Drinks');
-    
+
     const buttonSearch = screen.getByTestId(BUTTON_SEARCH);
     expect(buttonSearch).toBeInTheDocument();
     userEvent.click(buttonSearch);
