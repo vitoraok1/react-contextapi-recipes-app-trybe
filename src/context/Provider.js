@@ -1,10 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
-
-const context = {};
+import {
+  getDrinksData,
+  getMealsData,
+  getMealsCategory,
+  getDrinksCategory } from '../services/drinksAndMeals';
 
 function Provider({ children }) {
+  const [drinksData, setDrinksData] = useState([]);
+  const [mealsData, setMealsData] = useState([]);
+  const [drinksCategory, setDrinksCategory] = useState([]);
+  const [mealsCategory, setMealsCategory] = useState([]);
+
+  useEffect(
+    () => {
+      const mealsApi = async () => {
+        const result = await getMealsData();
+        setMealsData(result);
+      };
+      const drinksApi = async () => {
+        const result = await getDrinksData();
+        setDrinksData(result);
+      };
+      mealsApi();
+      drinksApi();
+    },
+    [],
+  );
+  useEffect(
+    () => {
+      const mealsCategoryApi = async () => {
+        const result = await getMealsCategory();
+        setMealsCategory(result);
+      };
+      const drinksCategoryApi = async () => {
+        const result = await getDrinksCategory();
+        setDrinksCategory(result);
+      };
+      mealsCategoryApi();
+      drinksCategoryApi();
+    },
+    [],
+  );
+  const context = useMemo(() => ({
+    drinksCategory,
+    mealsCategory,
+    drinksData,
+    mealsData,
+    setDrinksData,
+    setMealsData,
+  }), [drinksCategory, mealsCategory, drinksData, mealsData]);
+
   return (
     <Context.Provider value={ context }>
       {children}
