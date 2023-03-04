@@ -5,7 +5,7 @@ import {
   getDrinksData,
   getMealsData,
   getMealsCategory,
-  getDrinksCategory } from '../api/drinksAndMeals';
+  getDrinksCategory } from '../services/drinksAndMeals';
 
 function Provider({ children }) {
   const [drinksData, setDrinksData] = useState([]);

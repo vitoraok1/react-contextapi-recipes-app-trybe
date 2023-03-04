@@ -23,7 +23,6 @@ export default function Recipes() {
           </div>
         ),
       )}
-      ;
     </div>
   );
   const mealsCard = (
@@ -42,7 +41,6 @@ export default function Recipes() {
 
         ),
       )}
-      ;
     </div>
   );
 
