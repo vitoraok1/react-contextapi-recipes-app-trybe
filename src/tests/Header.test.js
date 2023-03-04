@@ -1,69 +1,48 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
-import Meals from '../pages/Meals';
-import FavoriteRecipes from '../pages/FavoriteRecipes';
+import App from '../App';
 
 const BUTTON_PROFILE = 'profile-top-btn';
 const BUTTON_SEARCH = 'search-top-btn';
-const PAGE_TITLE = 'page-title';
+const FAVORITE_LINK = '/favorite-recipes';
+const DRINKS_LINK = '/drinks';
 
 describe('1. Testes no componente Header', () => {
-  it('1.1 Verifica se a tela refeições possui os botões profile e search e nome da página', () => {
-    renderWithRouter(<Meals />);
+  it('1.2 Verifica se a tela refeições favoritas possui os botões', () => {
+    const { history } = renderWithRouter(<App />);
 
-    const buttonProfile = screen.getByTestId(BUTTON_PROFILE);
-    const buttonSearch = screen.getByTestId(BUTTON_SEARCH);
-    const pageTitle = screen.getByTestId(PAGE_TITLE);
+    act(() => history.push(FAVORITE_LINK));
 
-    expect(buttonProfile).toBeInTheDocument();
-    expect(buttonSearch).toBeInTheDocument();
-    expect(pageTitle).toBeInTheDocument();
-    waitFor(() => expect(pageTitle).toHaveTextContent('Meals'));
-  });
-  it('1.2 Verifica se a tela refeições favoritas possui o nome da página', () => {
-    const { history } = renderWithRouter(<FavoriteRecipes />);
-    const { pathname } = history.location;
+    const profileButton = screen.getByTestId(BUTTON_PROFILE);
+    const pageTitle = screen.getByTestId('page-title');
 
-    const buttonProfile = screen.getByTestId(BUTTON_PROFILE);
-    const buttonSearch = screen.getByTestId(BUTTON_SEARCH);
-
-    expect(buttonProfile).toBeInTheDocument();
-    expect(buttonSearch).toBeInTheDocument();
-    waitFor(() => expect(pathname).toEqual('/favorite-recipes'));
-    waitFor(() => expect(screen.getByTestId(PAGE_TITLE)).toHaveTextContent('Favorite Recipes'));
+    expect(profileButton).toBeInTheDocument();
+    expect(pageTitle).toHaveTextContent('Favorite Recipes');
   });
   it('1.3 Verifica se o botão profile muda pra pagina do perfil', () => {
-    const { history } = renderWithRouter(<Meals />);
-    const { pathname } = history.location;
+    const { history } = renderWithRouter(<App />);
+
+    act(() => history.push(FAVORITE_LINK));
 
     const buttonProfile = screen.getByTestId(BUTTON_PROFILE);
     userEvent.click(buttonProfile);
 
-    waitFor(() => expect(pathname).toEqual('/profile'));
+    expect(screen.getByRole('heading', { level: 1, name: 'Profile' }))
+      .toBeInTheDocument();
   });
-  it('1.4 Verifica se o botão search abre a search bar', () => {
-    renderWithRouter(<Meals />);
+  it('1.4 Verifica se a página Drinks possui o botão seachbar', () => {
+    const { history } = renderWithRouter(<App />);
 
-    const buttonSearch = screen.getByTestId(BUTTON_SEARCH);
-    expect(buttonSearch).toBeInTheDocument();
-    userEvent.click(buttonSearch);
-    waitFor(() => expect(buttonSearch).not.toBeInTheDocument());
-  });
-  it('1.5 Verifica se a tela profile abre a partir da tela refeições favoritas', () => {
-    const { history } = renderWithRouter(<FavoriteRecipes />);
-    const { pathname } = history.location;
+    act(() => history.push(DRINKS_LINK));
 
-    const buttonProfile = screen.getByTestId(BUTTON_PROFILE);
-    const buttonSearch = screen.getByTestId(BUTTON_SEARCH);
+    const profileButton = screen.getByTestId(BUTTON_PROFILE);
+    const pageTitle = screen.getByTestId('page-title');
+    const searchButton = screen.getByTestId(BUTTON_SEARCH);
 
-    expect(buttonProfile).toBeInTheDocument();
-    expect(buttonSearch).toBeInTheDocument();
-    waitFor(() => expect(pathname).toEqual('/favorite-recipes'));
-    waitFor(() => expect(screen.getByText('Favorite Recipes')).toBeInTheDocument());
-    userEvent.click(buttonProfile);
-
-    waitFor(() => expect(pathname).toEqual('/profile'));
+    expect(profileButton).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+    expect(pageTitle).toHaveTextContent('Drinks');
   });
 });
