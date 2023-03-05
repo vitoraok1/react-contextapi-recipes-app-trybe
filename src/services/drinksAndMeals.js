@@ -9,6 +9,7 @@ export const getMealsData = async () => {
 export const getDrinksData = async () => {
   const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
   const data = await request.json();
+  console.log(data);
   return data.drinks;
 };
 

@@ -35,19 +35,19 @@ describe('1. Testes no componente CategoryButtons', () => {
     act(() => history.push('/meals'));
 
     await waitFor(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Chicken' }));
-      expect(screen.getByRole('heading', { name: 'Ayam Percik' })).toBeInTheDocument();
+      userEvent.click(screen.getByRole('button', { name: 'Dessert' }));
+      expect(screen.getByRole('heading', { name: 'Corba' })).toBeInTheDocument();
       userEvent.click(screen.getByRole('button', { name: 'All' }));
     });
   });
-  it('1.5 Verifica se ao clicar novamnte em algum botão das categorias de Meals, renderiza os cards iniciais', async () => {
+  it('1.5 Verifica se ao clicar novamente em algum botão das categorias de Meals, renderiza os cards iniciais', async () => {
     const { history } = renderWithRouter(<App />);
 
     act(() => history.push('/meals'));
 
     await waitFor(() => {
       userEvent.click(screen.getByRole('button', { name: 'Chicken' }));
-      userEvent.click(screen.getByRole('button', { name: 'Chicken' }));
+      userEvent.click(screen.getByRole('button', { name: 'Breakfast' }));
       expect(screen.getByRole('heading', { name: 'Corba' })).toBeInTheDocument();
     });
   });
