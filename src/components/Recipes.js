@@ -11,7 +11,7 @@ export default function Recipes() {
   const drinksCard = (
     <div>
       <CategoryButton />
-      {drinksData.slice(0, maxCards).map(
+      {drinksData?.slice(0, maxCards).map(
         ({ strDrink, strDrinkThumb, idDrink }, index) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
             <Link to={ `/drinks/${idDrink}` }>
@@ -30,7 +30,7 @@ export default function Recipes() {
   const mealsCard = (
     <div>
       <CategoryButton />
-      {mealsData.slice(0, maxCards).map(
+      {mealsData?.slice(0, maxCards).map(
         ({ strMeal, strMealThumb, idMeal }, index) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
             <Link to={ `/meals/${idMeal}` }>

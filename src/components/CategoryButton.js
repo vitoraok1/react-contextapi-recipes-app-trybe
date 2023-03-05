@@ -59,7 +59,7 @@ export default function CategoryButton() {
 
   const drinksCategoryBtn = (
     <div>
-      {drinksCategory.slice(0, maxButton).map(
+      {drinksCategory?.slice(0, maxButton).map(
         ({ strCategory }) => (
           <div key={ strCategory }>
             <button
@@ -77,7 +77,7 @@ export default function CategoryButton() {
   );
   const mealsCategoryBtn = (
     <div>
-      {mealsCategory.slice(0, maxButton).map(
+      {mealsCategory?.slice(0, maxButton).map(
         ({ strCategory }) => (
           <div key={ strCategory }>
             <button
