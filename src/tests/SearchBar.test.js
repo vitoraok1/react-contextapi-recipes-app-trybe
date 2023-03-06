@@ -43,7 +43,7 @@ describe('1. Testes no componente SearchBar', () => {
     })).toBeInTheDocument());
   });
 
-  it('1.5 Verifica se a mensagem de alerta aparece caso o usuário pesquise por duas letras com o checkbox "Primeira letra" selecionado', async () => {
+  it('1.4 Verifica se a mensagem de alerta aparece caso o usuário pesquise por duas letras com o checkbox "Primeira letra" selecionado', async () => {
     const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
     renderWithRouterAndContext(<App />, '/meals');
@@ -56,10 +56,13 @@ describe('1. Testes no componente SearchBar', () => {
       name: /pesquisar/i,
     }));
 
-    await waitFor(() => expect(alertMock).toHaveBeenCalledTimes(1));
+    await waitFor(() => {
+      expect(alertMock).toHaveBeenCalledTimes(1);
+      expect(alertMock).toHaveTextContent('Your search must have only 1 (one) character');
+    });
   });
 
-  it('1.6 Verifica se a mensagem de alerta aparece caso o usuário pesquise por um nome que não existe', async () => {
+  it('1.5 Verifica se a mensagem de alerta aparece caso o usuário pesquise por um nome que não existe', async () => {
     const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
     renderWithRouterAndContext(<App />, '/drinks');
@@ -78,7 +81,7 @@ describe('1. Testes no componente SearchBar', () => {
     await waitFor(() => expect(alertMock).toHaveBeenCalledTimes(1));
   });
 
-  it('1.7 Verifica se é possível pesquisar por nome na página de comidas e caso o retorno seja uma receita, redireciona para página de detalhes referente', async () => {
+  it('1.6 Verifica se é possível pesquisar por nome na página de comidas e caso o retorno seja uma receita, redireciona para página de detalhes referente', async () => {
     const { history } = renderWithRouterAndContext(<App />, '/meals');
 
     userEvent.click(screen.getByRole('img', {
@@ -95,7 +98,7 @@ describe('1. Testes no componente SearchBar', () => {
     await (waitFor(() => expect(history.location.pathname).toBe('/meals/52977')));
   });
 
-  it('1.8 Verifica se é possível pesquisar pela primeira letra na página de comidas', async () => {
+  it('1.7 Verifica se é possível pesquisar pela primeira letra na página de comidas', async () => {
     renderWithRouterAndContext(<App />, '/meals');
 
     userEvent.click(screen.getByRole('img', {
