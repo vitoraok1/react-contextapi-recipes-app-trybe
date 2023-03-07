@@ -22,6 +22,12 @@ export const getRecipesByName = async (type, name) => {
   return result;
 };
 
+export const getRecipesById = async (type, id) => {
+  const request = await fetch(`https://www.${type}.com/api/json/v1/1/lookup.php?i=${id}`);
+  const result = await request.json();
+  return result;
+};
+
 export const getRecipesByFirstLetter = async (type, letter) => {
   const request = await fetch(`https://www.${type}.com/api/json/v1/1/search.php?f=${letter}`);
   const result = await request.json();

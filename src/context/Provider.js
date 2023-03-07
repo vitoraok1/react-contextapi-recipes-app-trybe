@@ -25,8 +25,6 @@ function Provider({ children }) {
     fetchRecipes();
   }, []);
 
-  console.log(drinksData);
-
   const context = useMemo(() => ({
     drinksCategory,
     mealsCategory,
