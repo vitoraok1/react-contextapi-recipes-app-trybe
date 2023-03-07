@@ -1,64 +1,117 @@
 import React from 'react';
-import { screen, act, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderWithRouter from './helpers/renderWithRouter';
+import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
+import drinkCategories from '../../cypress/mocks/drinkCategories';
+import mealsCategories from '../../cypress/mocks/mealCategories';
 import App from '../App';
 
 const DRINK_NAME = 'Ordinary Drink';
 
 describe('1. Testes no componente CategoryButtons', () => {
-  it('1.2 Verifica se ao clicar em algum botão das categorias de Drinks, renderiza novos cards', async () => {
-    const { history } = renderWithRouter(<App />);
+  beforeEach(jest.restoreAllMocks);
 
-    act(() => history.push('/drinks'));
+  it('1.2 Verifica se os botões das categorias de Comidas, renderiza novos cards', async () => {
+    renderWithRouterAndContext(<App />, '/meals');
+
+    // await waitFor(() => {
+    //   expect(screen.getByRole('button', {
+    //     name: /beef/i,
+    //   })).toBeInTheDocument();
+    //   userEvent.click(screen.getByRole('button', {
+    //     name: /beef/i,
+    //   }));
+    //   expect(screen.getByRole('heading', {
+    //     name: /beef and mustard pie/i,
+    //   })).toBeInTheDocument();
+    // });
+
+    expect(await screen.findByRole('button', {
+      name: /beef/i,
+    })).toBeInTheDocument();
+    userEvent.click(await screen.findByRole('button', {
+      name: /beef/i,
+    }));
+    expect(await screen.findByRole('heading', {
+      name: /beef and mustard pie/i,
+    })).toBeInTheDocument();
+  });
+
+  it('1.3 Verifica se ao clicar em algum botão das categorias de Bebidas, renderiza novos cards', async () => {
+    renderWithRouterAndContext(<App />, '/drinks');
+
+    expect(await screen.findByRole('button', {
+      name: /shake/i,
+    })).toBeInTheDocument();
+    userEvent.click(await screen.findByRole('button', {
+      name: /shake/i,
+    }));
+    expect(await screen.findByRole('heading', {
+      name: /151 florida bushwacker/i,
+    })).toBeInTheDocument();
+  });
+
+  it('1.4 Verifica se ao clicar novamente em algum botão das categorias de Bebidas, renderiza os cards iniciais', async () => {
+    renderWithRouterAndContext(<App />, '/drinks');
+
+    userEvent.click(await screen.findByRole('button', { name: DRINK_NAME }));
+    userEvent.click(await screen.findByRole('button', { name: DRINK_NAME }));
+    expect(await screen.findByRole('heading', { name: 'GG' })).toBeInTheDocument();
+  });
+
+  it('1.5 Verifica se ao clicar novamente em algum botão das categorias de Comidas, renderiza os cards iniciais', async () => {
+    renderWithRouterAndContext(<App />, '/meals');
+
+    userEvent.click(await screen.findByRole('button', { name: 'Chicken' }));
+    userEvent.click(await screen.findByRole('button', { name: 'Breakfast' }));
+    expect(await screen.findByRole('heading', { name: 'Corba' })).toBeInTheDocument();
+  });
+
+  it('1.6 Verifica se ao clicar no botão "All" na página de Comidas renderiza os cards iniciais', async () => {
+    renderWithRouterAndContext(<App />, '/meals');
+
+    userEvent.click(await screen.findByRole('button', { name: 'Dessert' }));
+    expect(await screen.findByRole('heading', { name: 'Apam balik' })).toBeInTheDocument();
+
+    userEvent.click(await screen.findByRole('button', { name: 'All' }));
+    expect(await screen.findByRole('heading', { name: 'Corba' })).toBeInTheDocument();
+  });
+
+  it('1.6 Verifica se ao clicar no botão "All" na página de Bebidas renderiza os cards iniciais', async () => {
+    renderWithRouterAndContext(<App />, '/drinks');
+
+    userEvent.click(await screen.findByRole('button', { name: 'Dessert' }));
+    expect(await screen.findByRole('heading', { name: 'Apam balik' })).toBeInTheDocument();
+
+    userEvent.click(await screen.findByRole('button', { name: 'All' }));
+    expect(await screen.findByRole('heading', { name: 'Corba' })).toBeInTheDocument();
+  });
+
+  it('1.7 Verifica se a API é chamada na página Bebidas', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: jest.fn().mockResolvedValue(drinkCategories),
+    });
+
+    renderWithRouterAndContext(<App />, '/drinks');
 
     await waitFor(() => {
-      userEvent.click(screen.getByRole('button', { name: DRINK_NAME }));
-      expect(screen.getByRole('heading', { name: '3-Mile Long Island Iced Tea' })).toBeInTheDocument();
-      userEvent.click(screen.getByRole('button', { name: 'All' }));
+      expect(fetch).toBeCalled();
+      expect(fetch).toBeCalledTimes(2);
+      expect(fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
     });
   });
-  it('1.3 Verifica se ao clicar novamnte em algum botão das categorias de Drinks, renderiza os cards iniciais', async () => {
-    const { history } = renderWithRouter(<App />);
 
-    act(() => history.push('/drinks'));
-
-    await waitFor(() => {
-      userEvent.click(screen.getByRole('button', { name: DRINK_NAME }));
-      userEvent.click(screen.getByRole('button', { name: DRINK_NAME }));
-      expect(screen.getByRole('heading', { name: 'GG' })).toBeInTheDocument();
+  it('1.7 Verifica se a API é chamada na página Comidas', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mealsCategories),
     });
-  });
-  it('1.4 Verifica se ao clicar em algum botão das categorias de Meals, renderiza novos cards', async () => {
-    const { history } = renderWithRouter(<App />);
 
-    act(() => history.push('/meals'));
+    renderWithRouterAndContext(<App />, '/meals');
 
     await waitFor(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Chicken' }));
-      expect(screen.getByRole('heading', { name: 'Ayam Percik' })).toBeInTheDocument();
-      userEvent.click(screen.getByRole('button', { name: 'All' }));
-    });
-  });
-  it('1.5 Verifica se ao clicar novamnte em algum botão das categorias de Meals, renderiza os cards iniciais', async () => {
-    const { history } = renderWithRouter(<App />);
-
-    act(() => history.push('/meals'));
-
-    await waitFor(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Chicken' }));
-      userEvent.click(screen.getByRole('button', { name: 'Chicken' }));
-      expect(screen.getByRole('heading', { name: 'Corba' })).toBeInTheDocument();
-    });
-  });
-  it('1.6 Verifica se ao clicar no botão "All" renderiza os cards iniciais', async () => {
-    const { history } = renderWithRouter(<App />);
-
-    act(() => history.push('/meals'));
-
-    await waitFor(() => {
-      userEvent.click(screen.getByRole('button', { name: 'All' }));
-      expect(screen.getByRole('heading', { name: 'Corba' })).toBeInTheDocument();
+      expect(fetch).toBeCalled();
+      expect(fetch).toBeCalledTimes(2);
+      expect(fetch).toBeCalledWith('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
     });
   });
 });

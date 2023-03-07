@@ -1,37 +1,36 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Drinks from '../pages/Drinks';
-import renderWithRouter from './helpers/renderWithRouter';
-import Profile from '../pages/Profile';
-
-const DRINK_ID = 'drinks-bottom-btn';
-const MEAL_ID = 'meals-bottom-btn';
+import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
+import App from '../App';
 
 describe('1. Testes no componente Footer', () => {
   it('1.2 Verifica se os icones estão presentes no final da pagina', async () => {
-    renderWithRouter(<Drinks />);
+    renderWithRouterAndContext(<App />, '/profile');
 
-    const drinkButton = screen.getByTestId(DRINK_ID);
-    const mealButton = screen.getByTestId(MEAL_ID);
-
-    expect(drinkButton).toBeInTheDocument();
-    expect(mealButton).toBeInTheDocument();
+    expect(await screen.findByRole('img', {
+      name: /drink icon/i,
+    })).toBeInTheDocument();
+    expect(await screen.findByRole('img', {
+      name: /meal icon/i,
+    })).toBeInTheDocument();
   });
+
   it('1.3 Verifica se o botão Drinks encaminha para a rota "/drinks"', async () => {
-    const { history } = renderWithRouter(<Profile />);
-    const { pathname } = history.location;
+    const { history } = renderWithRouterAndContext(<App />, '/profile');
 
-    const drinkButton = screen.getByTestId(DRINK_ID);
-    userEvent.click(drinkButton);
-    waitFor(() => expect(pathname).toEqual('/drinks'));
+    userEvent.click(await screen.findByRole('img', {
+      name: /drink icon/i,
+    }));
+    expect(history.location.pathname).toBe('/drinks');
   });
-  it('1.4 Verifica se o botão Meals encaminha para a rota "/drinks"', async () => {
-    const { history } = renderWithRouter(<Profile />);
-    const { pathname } = history.location;
 
-    const mealButton = screen.getByTestId(MEAL_ID);
-    userEvent.click(mealButton);
-    waitFor(() => expect(pathname).toEqual('/meal'));
+  it('1.4 Verifica se o botão Meals encaminha para a rota "/meals"', async () => {
+    const { history } = renderWithRouterAndContext(<App />, '/profile');
+
+    userEvent.click(await screen.findByRole('img', {
+      name: /meal icon/i,
+    }));
+    expect(history.location.pathname).toBe('/meals');
   });
 });
