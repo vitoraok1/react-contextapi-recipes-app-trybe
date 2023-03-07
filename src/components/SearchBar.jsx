@@ -1,26 +1,26 @@
 import React, { useContext, useState } from 'react';
-import { Redirect, useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import {
-  getFilterDrinksByIngredients,
-  getFilterMealsByIngredients,
-  getMealsDataByFirstLetter,
-  getDrinksDataByFirstLetter,
-  getMealsDataByName,
-  getDrinksDataByName,
+  getFilterByIngredients,
+  getRecipesByFirstLetter,
+  getRecipesByName,
 } from '../services/drinksAndMeals';
 import context from '../context/Context';
 
 export default function SearchBar() {
   const {
     setDrinksData,
-    setMealsData,
-    mealsData,
-    drinksData } = useContext(context);
+    setMealsData } = useContext(context);
 
   const drinksPage = useRouteMatch('/drinks');
   const [filterRadio, setFilterRadio] = useState('name');
   const [inputValue, setInputValue] = useState('');
   const [isValidate, setIsValidate] = useState(true);
+
+  const drinkUrl = 'thecocktaildb';
+  const mealUrl = 'themealdb';
+
+  const history = useHistory();
 
   const handleValidateFirstLetter = (selectedRadio, value) => {
     if (selectedRadio === 'first-letter' && value.length > 1) {
@@ -29,61 +29,62 @@ export default function SearchBar() {
     }
   };
 
-  const handleClickRequestAPI = () => {
-    handleValidateFirstLetter(filterRadio, inputValue);
-
-    switch (filterRadio) {
-    case 'ingredients':
-      if (drinksPage) {
-        const filterDrinksByIngredients = getFilterDrinksByIngredients(inputValue);
-        filterDrinksByIngredients.then((total) => {
-          setDrinksData(total);
-        });
-      } else {
-        const filterMealsByIngredient = getFilterMealsByIngredients(inputValue);
-        filterMealsByIngredient.then((total) => {
-          setMealsData(total);
-        });
-      }
-      break;
-    case 'name':
-      if (drinksPage) {
-        const filterDrinksByName = getDrinksDataByName(inputValue);
-        filterDrinksByName.then((total) => {
-          setDrinksData(total);
-        });
-      } else {
-        const filterMealsByName = getMealsDataByName(inputValue);
-        filterMealsByName.then((total) => {
-          setMealsData(total);
-        });
-      }
-      break;
-    case 'first-letter':
-      if (isValidate) {
-        if (drinksPage) {
-          const filterDrinksByFirstLetter = getDrinksDataByFirstLetter(inputValue);
-          filterDrinksByFirstLetter.then((total) => {
-            setDrinksData(total);
-          });
-        } else {
-          const filterMealsByFirstLetter = getMealsDataByFirstLetter(inputValue);
-          filterMealsByFirstLetter.then((total) => {
-            setMealsData(total);
-          });
-        }
-      }
-      break;
-    default:
-      break;
+  const verifyDrinkToRedirect = (total) => {
+    if (total.drinks && total.drinks.length === 1) {
+      history.push(`/drinks/${total.drinks[0].idDrink}`);
     }
   };
 
-  if (mealsData.length === 1) {
-    return <Redirect to={ `meals/${mealsData[0].idMeal}` } />;
-  } if (drinksData.length === 1) {
-    return <Redirect to={ `drinks/${drinksData[0].idDrink}` } />;
-  }
+  const verifyMealToRedirect = (total) => {
+    if (total.meals && total.meals.length === 1) {
+      history.push(`/meals/${total.meals[0].idMeal}`);
+    }
+  };
+
+  const handleClickRequestAPI = () => {
+    handleValidateFirstLetter(filterRadio, inputValue);
+    if (filterRadio === 'ingredients') {
+      if (drinksPage) {
+        const filterDrinksByIngredients = getFilterByIngredients(drinkUrl, inputValue);
+        filterDrinksByIngredients.then((total) => {
+          verifyDrinkToRedirect(total);
+          setDrinksData(total);
+        });
+      } else {
+        const filterMealsByIngredient = getFilterByIngredients(mealUrl, inputValue);
+        filterMealsByIngredient.then((total) => {
+          verifyMealToRedirect(total);
+          setMealsData(total);
+        });
+      }
+    } else if (filterRadio === 'name') {
+      if (drinksPage) {
+        const filterDrinksByName = getRecipesByName(drinkUrl, inputValue);
+        filterDrinksByName.then((total) => {
+          verifyDrinkToRedirect(total);
+          setDrinksData(total);
+        });
+      } else {
+        const filterMealsByName = getRecipesByName(mealUrl, inputValue);
+        filterMealsByName.then((total) => {
+          verifyMealToRedirect(total);
+          setMealsData(total);
+        });
+      }
+    } else if (isValidate) {
+      if (drinksPage) {
+        const filterDrinksByFirstLetter = getRecipesByFirstLetter(drinkUrl, inputValue);
+        filterDrinksByFirstLetter.then((total) => {
+          setDrinksData(total);
+        });
+      } else {
+        const filterMealsByFirstLetter = getRecipesByFirstLetter(mealUrl, inputValue);
+        filterMealsByFirstLetter.then((total) => {
+          setMealsData(total);
+        });
+      }
+    }
+  };
 
   return (
     <section>

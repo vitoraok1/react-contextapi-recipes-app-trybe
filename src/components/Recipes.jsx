@@ -8,48 +8,57 @@ export default function Recipes() {
   const maxCards = 12;
   const drinksPage = useRouteMatch('/drinks');
 
-  const drinksCard = (
-    <div>
-      {drinksData?.slice(0, maxCards).map(
-        ({ strDrink, strDrinkThumb, idDrink }, index) => (
-          <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <Link to={ `/drinks/${idDrink}` }>
-              <img
-                alt={ strDrink }
-                src={ strDrinkThumb }
-                data-testid={ `${index}-card-img` }
-              />
-            </Link>
-            <h2 key={ strDrink } data-testid={ `${index}-card-name` }>{ strDrink }</h2>
-          </div>
-        ),
-      )}
-    </div>
-  );
-  const mealsCard = (
-    <div>
-      {mealsData?.slice(0, maxCards).map(
-        ({ strMeal, strMealThumb, idMeal }, index) => (
-          <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <Link to={ `/meals/${idMeal}` }>
-              <img
-                alt={ strMeal }
-                src={ strMealThumb }
-                data-testid={ `${index}-card-img` }
-              />
-            </Link>
-            <h2 key={ strMeal } data-testid={ `${index}-card-name` }>{ strMeal }</h2>
-          </div>
+  const drinksCard = () => {
+    const drinksRecipes = drinksData.drinks;
 
-        ),
-      )}
-    </div>
-  );
+    return (
+      <div>
+        {drinksRecipes?.slice(0, maxCards).map(
+          ({ strDrink, strDrinkThumb, idDrink }, index) => (
+            <div key={ index } data-testid={ `${index}-recipe-card` }>
+              <Link to={ `/drinks/${idDrink}` }>
+                <img
+                  alt={ strDrink }
+                  src={ strDrinkThumb }
+                  data-testid={ `${index}-card-img` }
+                />
+              </Link>
+              <h2 key={ strDrink } data-testid={ `${index}-card-name` }>{ strDrink }</h2>
+            </div>
+          ),
+        )}
+      </div>
+    );
+  };
+
+  const mealsCard = () => {
+    const mealsRecipes = mealsData.meals;
+
+    return (
+      <div>
+        {mealsRecipes?.slice(0, maxCards).map(
+          ({ strMeal, strMealThumb, idMeal }, index) => (
+            <div key={ index } data-testid={ `${index}-recipe-card` }>
+              <Link to={ `/meals/${idMeal}` }>
+                <img
+                  alt={ strMeal }
+                  src={ strMealThumb }
+                  data-testid={ `${index}-card-img` }
+                />
+              </Link>
+              <h2 key={ strMeal } data-testid={ `${index}-card-name` }>{ strMeal }</h2>
+            </div>
+
+          ),
+        )}
+      </div>
+    );
+  };
 
   return (
     <div>
       <CategoryButton />
-      {drinksPage ? drinksCard : mealsCard }
+      {drinksPage ? drinksCard() : mealsCard() }
     </div>
   );
 }

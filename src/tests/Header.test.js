@@ -5,7 +5,6 @@ import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import App from '../App';
 
 describe('1. Testes no componente Header', () => {
-  afterEach(() => jest.clearAllMocks());
   it('1.2 Verifica se a tela refeições favoritas possui o nome da página', async () => {
     renderWithRouterAndContext(<App />, '/favorite-recipes');
 

@@ -1,11 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import context from '../context/Context';
-import {
-  getFilterDrinks,
-  getFilterMeals,
-  getDrinksData,
-  getMealsData } from '../services/drinksAndMeals';
+import { getRecipes, getFilterRecipes } from '../services/drinksAndMeals';
 
 export default function CategoryButton() {
   const {
@@ -18,81 +14,91 @@ export default function CategoryButton() {
   const [isMealsFiltered, setIsMealsFiltered] = useState(false);
   const [isDrinksFiltered, setIsDrinksFiltered] = useState(false);
 
-  const fetchFilter = (category) => {
+  const fetchFilter = (name, category) => {
     if (drinksPage && category && isDrinksFiltered) {
-      // Precisei usar um .then para esperar a promise se resolver para para de quebrar o código na parte do .slice
-      const everyDrinks = getDrinksData();
+      const everyDrinks = getRecipes(name);
       everyDrinks.then((total) => {
         setDrinksData(total);
         setIsDrinksFiltered(!isDrinksFiltered);
       });
     } else if (drinksPage && category) {
-      const totalPromiseDrinks = getFilterDrinks(category);
+      const totalPromiseDrinks = getFilterRecipes(name, category);
       totalPromiseDrinks.then((total) => {
         setDrinksData(total);
         setIsDrinksFiltered(!isDrinksFiltered);
       });
     } else if (drinksPage && !category) {
-      const everyDrinks = getDrinksData();
+      const everyDrinks = getRecipes('thecocktaildb');
       everyDrinks.then((total) => {
         setDrinksData(total);
       });
     } else if (!drinksPage && category && isMealsFiltered) {
-      const everyMeals = getMealsData();
+      const everyMeals = getRecipes(name);
       everyMeals.then((total) => {
         setMealsData(total);
         setIsMealsFiltered(!isMealsFiltered);
       });
     } else if (!drinksPage && category) {
-      const totalPromiseMeals = getFilterMeals(category);
+      const totalPromiseMeals = getFilterRecipes(name, category);
       totalPromiseMeals.then((total) => {
         setMealsData(total);
         setIsMealsFiltered(!isMealsFiltered);
       });
     } else {
-      const everyMeals = getMealsData();
+      const everyMeals = getRecipes('themealdb');
       everyMeals.then((total) => {
         setMealsData(total);
       });
     }
   };
 
-  const drinksCategoryBtn = (
-    <div>
-      {drinksCategory?.slice(0, maxButton).map(
-        ({ strCategory }) => (
-          <div key={ strCategory }>
-            <button
-              data-testid={ `${strCategory}-category-filter` }
-              onClick={ ({ target }) => { fetchFilter(target.value); } }
-              value={ strCategory }
-            >
-              {strCategory}
-            </button>
-          </div>
+  const drinksCategoryBtn = () => {
+    const drinksByCategories = drinksCategory.drinks;
+    const drinkUrl = 'thecocktaildb';
 
-        ),
-      )}
-    </div>
-  );
-  const mealsCategoryBtn = (
-    <div>
-      {mealsCategory?.slice(0, maxButton).map(
-        ({ strCategory }) => (
-          <div key={ strCategory }>
-            <button
-              data-testid={ `${strCategory}-category-filter` }
-              onClick={ ({ target }) => { fetchFilter(target.value); } }
-              value={ strCategory }
-            >
-              {strCategory}
-            </button>
-          </div>
+    return (
+      <div>
+        {drinksByCategories?.slice(0, maxButton).map(
+          ({ strCategory }) => (
+            <div key={ strCategory }>
+              <button
+                data-testid={ `${strCategory}-category-filter` }
+                onClick={ ({ target }) => { fetchFilter(drinkUrl, target.value); } }
+                value={ strCategory }
+              >
+                {strCategory}
+              </button>
+            </div>
 
-        ),
-      )}
-    </div>
-  );
+          ),
+        )}
+      </div>
+    );
+  };
+
+  const mealsCategoryBtn = () => {
+    const mealsByCategories = mealsCategory.meals;
+    const mealUrl = 'themealdb';
+
+    return (
+      <div>
+        {mealsByCategories?.slice(0, maxButton).map(
+          ({ strCategory }) => (
+            <div key={ strCategory }>
+              <button
+                data-testid={ `${strCategory}-category-filter` }
+                onClick={ ({ target }) => { fetchFilter(mealUrl, target.value); } }
+                value={ strCategory }
+              >
+                {strCategory}
+              </button>
+            </div>
+
+          ),
+        )}
+      </div>
+    );
+  };
 
   return (
     <section>
@@ -103,7 +109,7 @@ export default function CategoryButton() {
       >
         All
       </button>
-      <div>{drinksPage ? drinksCategoryBtn : mealsCategoryBtn }</div>
+      <div>{drinksPage ? drinksCategoryBtn() : mealsCategoryBtn() }</div>
     </section>
   );
 }

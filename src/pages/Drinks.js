@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import Recipes from '../components/Recipes';
 import Footer from '../components/Footer';
 
-function Drinks() {
+export default function Drinks() {
   return (
     <div>
       <Header />
@@ -12,5 +12,3 @@ function Drinks() {
     </div>
   );
 }
-
-export default Drinks;
