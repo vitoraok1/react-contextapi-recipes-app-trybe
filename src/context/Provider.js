@@ -1,31 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
-import { getRecipes, getRecipesByCategory } from '../services/drinksAndMeals';
 
 function Provider({ children }) {
   const [drinksData, setDrinksData] = useState([]);
   const [mealsData, setMealsData] = useState([]);
   const [drinksCategory, setDrinksCategory] = useState([]);
   const [mealsCategory, setMealsCategory] = useState([]);
+  const [drinkDetails, setDrinkDetails] = useState([]);
+  const [mealsDetails, setMealsDetails] = useState([]);
 
-  useEffect(() => {
-    const { pathname } = window.location;
-    const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
-    console.log(type);
-
-    const fetchRecipes = async () => {
-      if (pathname.includes === ('/drinks')) {
-        setDrinksData(await getRecipes(type));
-        setDrinksCategory(await getRecipesByCategory(type));
-      }
-      if (pathname.includes === ('/meals')) {
-        setMealsData(await getRecipes(type));
-        setMealsCategory(await getRecipesByCategory(type));
-      }
-    };
-    fetchRecipes();
-  }, []);
+  // console.log(drinksData);
+  // console.log(mealsData);
 
   const context = useMemo(() => ({
     drinksCategory,
@@ -34,7 +20,13 @@ function Provider({ children }) {
     mealsData,
     setDrinksData,
     setMealsData,
-  }), [drinksCategory, mealsCategory, drinksData, mealsData]);
+    setDrinkDetails,
+    setMealsDetails,
+    setDrinksCategory,
+    setMealsCategory,
+    drinkDetails,
+    mealsDetails,
+  }), [drinksCategory, mealsCategory, drinksData, mealsData, mealsDetails, drinkDetails]);
 
   return (
     <Context.Provider value={ context }>

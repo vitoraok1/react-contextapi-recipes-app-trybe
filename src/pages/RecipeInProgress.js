@@ -6,14 +6,15 @@ function RecipeInProgress() {
   const { pathname } = window.location;
   const regex = /\d+/g;
   const id = pathname.match(regex);
-  const { drinksData, mealsData } = useContext(context);
-  console.log(drinksData);
-  console.log(mealsData);
+  const { drinkDetails, mealsDetails } = useContext(context);
+  console.log(drinkDetails);
+  console.log(mealsDetails);
+  console.log(id);
   // const { params } = match;
   // const { id } = params;
   const drinksPage = pathname.includes('/drinks');
-  const meals = mealsData.find((item) => item.idDrink === id);
-  const drink = drinksData.find((item) => item.idDrink === id);
+  const meals = mealsDetails;
+  const drink = drinkDetails;
 
   const drinkProgressPage = () => {
     const drinkInfo = drink;
