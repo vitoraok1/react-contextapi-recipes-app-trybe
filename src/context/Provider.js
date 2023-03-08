@@ -8,8 +8,8 @@ function Provider({ children }) {
   const [mealsData, setMealsData] = useState([]);
   const [drinksCategory, setDrinksCategory] = useState([]);
   const [mealsCategory, setMealsCategory] = useState([]);
-  const [drinkDetails, setDrinkDetails] = useState([]);
-  const [mealsDetails, setMealsDetails] = useState([]);
+  const [drinkDetails, setDrinkDetails] = useState({});
+  const [mealsDetails, setMealsDetails] = useState({});
 
   useEffect(() => {
     const { pathname } = window.location;

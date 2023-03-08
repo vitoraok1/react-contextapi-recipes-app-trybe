@@ -1,34 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { getRecipesById } from '../services/drinksAndMeals';
-import context from '../context/Context';
+import React from 'react';
+
 import CardMealsDetails from './CardMealsDetails';
 import CardDrinksDetails from './CardDrinksDetails';
 
 export default function RecipeDetails() {
-  const {
-    setDrinkDetails, setMealsDetails,
-  } = useContext(context);
-
-  useEffect(() => {
-    const { pathname } = window.location;
-    const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
-    const fetchRecipes = () => {
-      if (pathname.includes('/drinks')) {
-        const replaceDrinks = pathname.replace('/drinks/', '');
-        const everyDrinks = getRecipesById(type, replaceDrinks);
-        everyDrinks.then((total) => {
-          setDrinkDetails(total);
-        });
-      } else {
-        const replaceMeals = pathname.replace('/meals/', '');
-        const everyMeals = getRecipesById(type, replaceMeals);
-        everyMeals.then((total) => {
-          setMealsDetails(total);
-        });
-      }
-    };
-    fetchRecipes();
-  }, []);
   return (
     <div>
       {window.location.pathname
