@@ -25,11 +25,14 @@ export default function Recipes() {
       }
       if (pathname.includes('/drinks')) {
         setDrinksData(await getRecipes(type));
+        setMealsData(await getRecipes(type));
         setDrinksCategory(await getRecipesByCategory(type));
       }
     };
     fetchRecipes();
   }, []);
+
+  console.log(mealsData);
 
   const drinksCard = () => {
     const drinksRecipes = drinksData.drinks;

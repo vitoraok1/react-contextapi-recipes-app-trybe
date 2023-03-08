@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import context from '../context/Context';
 
 export default function CardDrinksDetails() {
-  const { drinkDetails } = useContext(context);
+  const { drinkDetails, mealsData } = useContext(context);
 
   let ingredients = [];
   let measure = [];
@@ -14,6 +14,8 @@ export default function CardDrinksDetails() {
       measure = [...measure, property[1]];
     }
   });
+
+  console.log(mealsData);
 
   return (
     <div>

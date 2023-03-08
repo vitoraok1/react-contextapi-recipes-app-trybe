@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player';
 import context from '../context/Context';
 
 export default function CardDrinksDetails() {
-  const { mealsDetails } = useContext(context);
+  const { mealsDetails, drinksData } = useContext(context);
 
   let ingredients = [];
   let measure = [];
@@ -15,6 +15,8 @@ export default function CardDrinksDetails() {
       measure = [...measure, property[1]];
     }
   });
+
+  console.log(drinksData);
 
   return (
     <div>
