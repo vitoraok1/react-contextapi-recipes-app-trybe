@@ -4,10 +4,11 @@ import Footer from '../components/Footer';
 import context from '../context/Context';
 
 function RecipeInProgress() {
-  const { drinksData, mealsData } = useContext(context);
   const { pathname } = window.location;
   const regex = /\d+/g;
   const id = pathname.match(regex);
+  console.log(id);
+  const { drinksData, mealsData } = useContext(context);
   console.log(drinksData);
   // const { params } = match;
   // const { id } = params;
@@ -20,7 +21,7 @@ function RecipeInProgress() {
 
     return (
       <div>
-        <div key={ drinkInfo.strDrink }>
+        <div key={ drinkInfo.strCategory }>
           <button
             name="share-button"
             data-testid="share-btn"
@@ -58,7 +59,7 @@ function RecipeInProgress() {
 
     return (
       <div>
-        <div key={ mealInfo.strMeal }>
+        <div key={ mealInfo.strCategory }>
           <button
             name="share-button"
             data-testid="share-btn"
