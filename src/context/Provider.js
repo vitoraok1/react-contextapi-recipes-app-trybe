@@ -8,8 +8,6 @@ function Provider({ children }) {
   const [mealsData, setMealsData] = useState([]);
   const [drinksCategory, setDrinksCategory] = useState([]);
   const [mealsCategory, setMealsCategory] = useState([]);
-  const [drinkDetails, setDrinkDetails] = useState([]);
-  const [mealsDetails, setMealsDetails] = useState([]);
 
   useEffect(() => {
     const { pathname } = window.location;
@@ -27,11 +25,6 @@ function Provider({ children }) {
     fetchRecipes();
   }, []);
 
-<<<<<<< HEAD
-=======
-  // console.log(drinksData);
-
->>>>>>> main-group-26-pagina-de-detalhes
   const context = useMemo(() => ({
     drinksCategory,
     mealsCategory,
@@ -39,11 +32,7 @@ function Provider({ children }) {
     mealsData,
     setDrinksData,
     setMealsData,
-    setDrinkDetails,
-    setMealsDetails,
-    drinkDetails,
-    mealsDetails,
-  }), [drinksCategory, mealsCategory, drinksData, mealsData, mealsDetails, drinkDetails]);
+  }), [drinksCategory, mealsCategory, drinksData, mealsData]);
 
   return (
     <Context.Provider value={ context }>
