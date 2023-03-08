@@ -1,55 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
-import { getRecipesById } from '../services/drinksAndMeals';
+import context from '../context/Context';
 
 export default function CardDrinksDetails() {
-  const [mealDetails, setMealDetails] = useState({});
-  const [mealIngredients, setMealIngredients] = useState([]);
-  const [mealIngredientsMeasure, setMealIngredientsMeasure] = useState([]);
+  const { mealsDetails } = useContext(context);
 
-  useEffect(() => {
-    const minNumberIngredient = 9;
-    const maxNumberIngredient = 29;
-    const minNumberMeasure = 29;
-    const maxNumberMeasure = 49;
-    const { pathname } = window.location;
-    const replaceMeals = pathname.replace('/meals/', '');
-    const everyMeals = getRecipesById('themealdb', replaceMeals);
-    everyMeals.then((total) => {
-      setMealDetails(total[0]);
-      console.log(Object.entries(total[0]));
-      setMealIngredients(Object.entries(total[0])
-        .slice(minNumberIngredient, maxNumberIngredient)
-        .filter((ingredient) => (ingredient[1])));
-      setMealIngredientsMeasure(Object.entries(total[0])
-        .slice(minNumberMeasure, maxNumberMeasure)
-        .filter((measure) => (measure[1])));
-    });
-  }, []);
-  console.log(mealIngredients);
-  console.log(mealIngredientsMeasure);
+  let ingredients = [];
+  let measure = [];
+  Object.entries(mealsDetails).forEach((property) => {
+    if (property[0].startsWith('strIngredient') && property[1]) {
+      ingredients = [...ingredients, property[1]];
+    }
+    if (property[0].startsWith('strMeasure') && property[1]) {
+      measure = [...measure, property[1]];
+    }
+  });
+
   return (
     <div>
       <img
         data-testid="recipe-photo"
-        alt={ mealDetails.strMeal }
-        src={ mealDetails.strMealThumb }
+        alt={ mealsDetails.strMeal }
+        src={ mealsDetails.strMealThumb }
       />
-      <title data-testid="recipe-title">{ mealDetails.strMeal }</title>
-      <span data-testid="recipe-category">{ mealDetails.strCategory }</span>
-      {mealIngredients.map((ingredient, index) => (
+      <title data-testid="recipe-title">{ mealsDetails.strMeal }</title>
+      <span data-testid="recipe-category">{ mealsDetails.strCategory }</span>
+      {ingredients.map((ingredient, index) => (
         <span
           key={ index }
           data-testid={ `${index}-ingredient-name-and-measure` }
         >
-          {`${ingredient[1]}
-           ${mealIngredientsMeasure[index] ? mealIngredientsMeasure[index][1] : ''}`}
+          {`${ingredient}
+           ${measure[index] ? measure[index] : ''}`}
         </span>
       ))}
-      <span data-testid="instructions">{ mealDetails.strInstructions }</span>
+      <span data-testid="instructions">{ mealsDetails.strInstructions }</span>
       <ReactPlayer
         data-testid="video"
-        url={ mealDetails.strYoutube }
+        url={ mealsDetails.strYoutube }
       />
     </div>
   );
