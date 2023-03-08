@@ -7,7 +7,6 @@ export default function Recipes() {
   const { drinksData, mealsData } = useContext(context);
   const maxCards = 12;
   const drinksPage = useRouteMatch('/drinks');
-
   const drinksCard = () => {
     const drinksRecipes = drinksData.drinks;
 
