@@ -25,8 +25,8 @@ export default function CardDrinksDetails() {
         .filter((measure) => (measure[1])));
     });
   }, []);
-  console.log(drinkIngredients);
-  console.log(drinkIngredientsMeasure);
+  // console.log(drinkIngredients);
+  // console.log(drinkIngredientsMeasure);
   return (
     <div>
       <img
