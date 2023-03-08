@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
+import { Carousel } from 'react-responsive-carousel';
 import context from '../context/Context';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export default function CardDrinksDetails() {
   const { drinkDetails, mealsData } = useContext(context);
-
+  const { meals } = mealsData;
+  const maxCards = 6;
   let ingredients = [];
   let measure = [];
   Object.entries(drinkDetails).forEach((property) => {
@@ -15,7 +18,7 @@ export default function CardDrinksDetails() {
     }
   });
 
-  console.log(mealsData);
+  console.log(meals);
 
   return (
     <div>
@@ -36,6 +39,24 @@ export default function CardDrinksDetails() {
         </span>
       ))}
       <span data-testid="instructions">{ drinkDetails.strInstructions }</span>
+      <Carousel>
+        {meals?.slice(0, maxCards).map(
+          ({ strMeal, strMealThumb }, index) => (
+            <div key={ index } data-testid={ `${index}-recommendation-card` }>
+
+              <img
+                alt={ strMeal }
+                src={ strMealThumb }
+
+              />
+
+              <h2 key={ strMeal } data-testid={ `${index}-recommendation-title` }>
+                { strMeal }
+              </h2>
+            </div>
+          ),
+        )}
+      </Carousel>
     </div>
   );
 }

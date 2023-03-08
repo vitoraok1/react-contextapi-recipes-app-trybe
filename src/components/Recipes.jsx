@@ -32,8 +32,6 @@ export default function Recipes() {
     fetchRecipes();
   }, []);
 
-  console.log(mealsData);
-
   const drinksCard = () => {
     const drinksRecipes = drinksData.drinks;
 
