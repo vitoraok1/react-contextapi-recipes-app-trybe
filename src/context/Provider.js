@@ -11,13 +11,15 @@ function Provider({ children }) {
 
   useEffect(() => {
     const { pathname } = window.location;
-    const type = pathname === '/meals' ? 'themealdb' : 'thecocktaildb';
+    const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
+    console.log(type);
 
     const fetchRecipes = async () => {
-      if (pathname === '/drinks') {
+      if (pathname.includes === ('/drinks')) {
         setDrinksData(await getRecipes(type));
         setDrinksCategory(await getRecipesByCategory(type));
-      } else {
+      }
+      if (pathname.includes === ('/meals')) {
         setMealsData(await getRecipes(type));
         setMealsCategory(await getRecipesByCategory(type));
       }

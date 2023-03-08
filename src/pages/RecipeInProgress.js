@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { useRouteMatch } from 'react-router-dom';
 import Footer from '../components/Footer';
 import context from '../context/Context';
 
@@ -7,14 +6,14 @@ function RecipeInProgress() {
   const { pathname } = window.location;
   const regex = /\d+/g;
   const id = pathname.match(regex);
-  console.log(id);
   const { drinksData, mealsData } = useContext(context);
   console.log(drinksData);
+  console.log(mealsData);
   // const { params } = match;
   // const { id } = params;
-  const drinksPage = useRouteMatch(`/drinks/${id}/in-progess`);
-  const drink = drinksData.find((item) => item.idDrink === id);
+  const drinksPage = pathname.includes('/drinks');
   const meals = mealsData.find((item) => item.idDrink === id);
+  const drink = drinksData.find((item) => item.idDrink === id);
 
   const drinkProgressPage = () => {
     const drinkInfo = drink;

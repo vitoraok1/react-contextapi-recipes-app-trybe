@@ -20,7 +20,7 @@ function App() {
       <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
       <Route
         exact
-        path="/meals/:id/in-progess"
+        path="/meals/:id/in-progress"
         component={ RecipeInProgress }
       />
       <Route
