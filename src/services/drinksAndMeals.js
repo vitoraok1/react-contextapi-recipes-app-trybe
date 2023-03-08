@@ -45,3 +45,9 @@ export const getFilterByIngredients = async (type, ingredient) => {
   const result = await request.json();
   return result;
 };
+
+export const getRecipesById = async (type, id) => {
+  const request = await fetch(`https://www.${type}.com/api/json/v1/1/lookup.php?i=${id}`);
+  const result = await request.json();
+  return result[type === 'thecocktaildb' ? 'drinks' : 'meals'];
+};
