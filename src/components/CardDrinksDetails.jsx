@@ -3,6 +3,7 @@ import context from '../context/Context';
 
 export default function CardDrinksDetails() {
   const { drinkDetails } = useContext(context);
+  console.log(drinkDetails);
 
   let ingredients = [];
   let measure = [];

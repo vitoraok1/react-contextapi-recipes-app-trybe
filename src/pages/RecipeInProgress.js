@@ -3,22 +3,17 @@ import Footer from '../components/Footer';
 import context from '../context/Context';
 
 function RecipeInProgress() {
+  const { drinkDetails, mealsDetails } = useContext(context);
   const { pathname } = window.location;
   const regex = /\d+/g;
   const id = pathname.match(regex);
-  const { drinkDetails, mealsDetails } = useContext(context);
-  console.log(drinkDetails);
-  console.log(mealsDetails);
   console.log(id);
   // const { params } = match;
   // const { id } = params;
   const drinksPage = pathname.includes('/drinks');
-  const meals = mealsDetails;
-  const drink = drinkDetails;
-
   const drinkProgressPage = () => {
-    const drinkInfo = drink;
-
+    const drinkInfo = drinkDetails;
+    console.log(drinkDetails);
     return (
       <div>
         <div key={ drinkInfo.strCategory }>
@@ -55,7 +50,8 @@ function RecipeInProgress() {
     );
   };
   const mealProgressPage = () => {
-    const mealInfo = meals;
+    const mealInfo = mealsDetails;
+    console.log(mealsDetails);
 
     return (
       <div>
