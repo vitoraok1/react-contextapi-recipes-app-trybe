@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
+import { Carousel } from 'react-responsive-carousel';
+import clipboardCopy from 'clipboard-copy';
 import context from '../context/Context';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export default function CardDrinksDetails() {
-  const { mealsDetails } = useContext(context);
-
+  const { mealsDetails, drinksData, isCopy, setIsCopy, saveId } = useContext(context);
+  const { drinks } = drinksData;
+  const maxCards = 6;
   let ingredients = [];
   let measure = [];
   Object.entries(mealsDetails).forEach((property) => {
@@ -16,6 +22,11 @@ export default function CardDrinksDetails() {
     }
   });
 
+  const handleShare = (id) => {
+    clipboardCopy(`http://localhost:3000/meals/${id}`);
+    setIsCopy(true);
+  };
+
   return (
     <div>
       <img
@@ -23,7 +34,7 @@ export default function CardDrinksDetails() {
         alt={ mealsDetails.strMeal }
         src={ mealsDetails.strMealThumb }
       />
-      <title data-testid="recipe-title">{ mealsDetails.strMeal }</title>
+      <h1 data-testid="recipe-title">{ mealsDetails.strMeal }</h1>
       <span data-testid="recipe-category">{ mealsDetails.strCategory }</span>
       {ingredients.map((ingredient, index) => (
         <span
@@ -35,10 +46,36 @@ export default function CardDrinksDetails() {
         </span>
       ))}
       <span data-testid="instructions">{ mealsDetails.strInstructions }</span>
+      <br />
+      <button type="button" data-testid="favorite-btn">
+        <img src={ whiteHeartIcon } alt="fav icon" />
+      </button>
+      {' '}
+      <button type="button" data-testid="share-btn" onClick={ () => handleShare(saveId) }>
+        <img src={ shareIcon } alt="share icon" />
+      </button>
+      { isCopy ? <span>Link copied!</span> : null}
       <ReactPlayer
         data-testid="video"
         url={ mealsDetails.strYoutube }
       />
+      <Carousel>
+        {drinks?.slice(0, maxCards).map(
+          ({ strDrink, strDrinkThumb }, index) => (
+            <div key={ index } data-testid={ `${index}-recommendation-card` }>
+
+              <img
+                alt={ strDrink }
+                src={ strDrinkThumb }
+              />
+
+              <h2 key={ strDrink } data-testid={ `${index}-recommendation-title` }>
+                { strDrink }
+              </h2>
+            </div>
+          ),
+        )}
+      </Carousel>
     </div>
   );
 }

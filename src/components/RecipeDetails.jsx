@@ -1,37 +1,53 @@
 import React, { useEffect, useContext } from 'react';
-import { getRecipesById } from '../services/drinksAndMeals';
+import { getRecipesById, getRecipes } from '../services/drinksAndMeals';
 import context from '../context/Context';
 import CardMealsDetails from './CardMealsDetails';
 import CardDrinksDetails from './CardDrinksDetails';
+import StartMealRecipeBtn from './StartMealRecipeBtn';
+import StartDrinkRecipeBtn from './StartDrinkRecipeBtn';
+import './RecipeDetails.css';
 
 export default function RecipeDetails() {
-  const { setDrinkDetails, setMealsDetails } = useContext(context);
+  const { setDrinkDetails,
+    setMealsDetails,
+    setDrinksData,
+    setMealsData,
+    setSaveId } = useContext(context);
 
   useEffect(() => {
     const { pathname } = window.location;
     const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
-    const fetchRecipes = () => {
+    const fetchRecipes = async () => {
       if (pathname.includes('/drinks')) {
         const replaceDrinks = pathname.replace('/drinks/', '');
-        const everyDrinks = getRecipesById(type, replaceDrinks);
-        everyDrinks.then((total) => {
-          setDrinkDetails(total[0]);
-        });
+        setDrinkDetails(await getRecipesById(type, replaceDrinks));
+        setMealsData(await getRecipes('themealdb'));
+        setSaveId(replaceDrinks);
       }
       if (pathname.includes('/meals')) {
         const replaceMeals = pathname.replace('/meals/', '');
-        const everyMeals = getRecipesById(type, replaceMeals);
-        everyMeals.then((total) => {
-          setMealsDetails(total[0]);
-        });
+        setMealsDetails(await getRecipesById(type, replaceMeals));
+        setDrinksData(await getRecipes('thecocktaildb'));
+        setSaveId(replaceMeals);
       }
     };
     fetchRecipes();
   }, []);
+
   return (
     <div>
       {window.location.pathname
-        .includes('/meals') ? <CardMealsDetails /> : <CardDrinksDetails />}
+        .includes('/meals') ? (
+          <div>
+            <CardMealsDetails />
+            <StartMealRecipeBtn />
+          </div>
+        ) : (
+          <div>
+            <CardDrinksDetails />
+            <StartDrinkRecipeBtn />
+          </div>
+        )}
     </div>
   );
 }
