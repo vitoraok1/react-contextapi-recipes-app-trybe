@@ -13,6 +13,11 @@ function RecipeInProgress() {
   let ingredients = [];
   let measure = [];
   const drinksPage = pathname.includes('/drinks');
+  const handleClassChange = ({ target }) => {
+    if (target.checked) {
+      localStorage.setItem('checked', JSON.stringify({ drinksPage }));
+    }
+  };
 
   useEffect(() => {
     const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
@@ -31,6 +36,8 @@ function RecipeInProgress() {
         measure = [...measure, property[1]];
       }
     });
+    console.log(ingredients);
+
     return (
       <div>
         <div key={ recipeInProgress.strDrink }>
@@ -82,7 +89,7 @@ function RecipeInProgress() {
                       type="checkbox"
                       key={ index }
                       value={ ingredient }
-                      onChange={ () => handleOnChange(index) }
+                      onChange={ handleClassChange }
                     />
                   </label>
                 </div>

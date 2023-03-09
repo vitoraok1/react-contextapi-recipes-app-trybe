@@ -3,8 +3,7 @@ import { getRecipesById, getRecipes } from '../services/drinksAndMeals';
 import context from '../context/Context';
 import CardMealsDetails from './CardMealsDetails';
 import CardDrinksDetails from './CardDrinksDetails';
-import StartMealRecipeBtn from './StartMealRecipeBtn';
-import StartDrinkRecipeBtn from './StartDrinkRecipeBtn';
+import StartRecipeButton from './StartRecipeButton';
 import './RecipeDetails.css';
 
 export default function RecipeDetails() {
@@ -40,14 +39,13 @@ export default function RecipeDetails() {
         .includes('/meals') ? (
           <div>
             <CardMealsDetails />
-            <StartMealRecipeBtn />
           </div>
         ) : (
           <div>
             <CardDrinksDetails />
-            <StartDrinkRecipeBtn />
           </div>
         )}
+      <StartRecipeButton />
     </div>
   );
 }
