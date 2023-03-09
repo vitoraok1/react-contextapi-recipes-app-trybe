@@ -42,6 +42,8 @@ export default function CardDrinksDetails() {
   }, []);
 
   const saveOnLocalStorage = () => {
+    const { pathname } = window.location;
+    const id = pathname.replace('/drinks/', '');
     const drinkFavorite = {
       id: idDrink,
       type: 'drink',
@@ -51,14 +53,19 @@ export default function CardDrinksDetails() {
       name: strDrink,
       image: strDrinkThumb,
     };
-    alreadyFavorite.push(drinkFavorite);
-    if (alreadyFavorite) {
-      localStorage
-        .setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+    if (alreadyFavorite.some((favorite) => favorite.id === id)) {
+      const newFavorites = alreadyFavorite.filter((favorite) => favorite.id !== id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
       setIsDrinkFavorited(!isDrinkFavorited);
-      console.log('cai');
-    } localStorage.setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
-    setIsDrinkFavorited(!isDrinkFavorited);
+    } else {
+      alreadyFavorite.push(drinkFavorite);
+      if (alreadyFavorite) {
+        localStorage
+          .setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+        setIsDrinkFavorited(!isDrinkFavorited);
+      } localStorage.setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+      setIsDrinkFavorited(!isDrinkFavorited);
+    }
   };
 
   return (

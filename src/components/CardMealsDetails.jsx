@@ -43,6 +43,8 @@ export default function CardDrinksDetails() {
   }, []);
 
   const saveOnLocalStorage = () => {
+    const { pathname } = window.location;
+    const id = pathname.replace('/meals/', '');
     const mealFavorite = {
       id: idMeal,
       type: 'meal',
@@ -52,13 +54,19 @@ export default function CardDrinksDetails() {
       name: strMeal,
       image: strMealThumb,
     };
-    alreadyFavorite.push(mealFavorite);
-    if (alreadyFavorite) {
-      localStorage
-        .setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+    if (alreadyFavorite.some((favorite) => favorite.id === id)) {
+      const newFavorites = alreadyFavorite.filter((favorite) => favorite.id !== id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
       setIsMealFavorited(!isMealFavorited);
-    } localStorage.setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
-    setIsMealFavorited(!isMealFavorited);
+    } else {
+      alreadyFavorite.push(mealFavorite);
+      if (alreadyFavorite) {
+        localStorage
+          .setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+        setIsMealFavorited(!isMealFavorited);
+      } localStorage.setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+      setIsMealFavorited(!isMealFavorited);
+    }
   };
 
   return (
