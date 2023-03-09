@@ -1,22 +1,39 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Footer from '../components/Footer';
+import { getRecipesById } from '../services/drinksAndMeals';
 import context from '../context/Context';
 
 function RecipeInProgress() {
-  const { drinkDetails, mealsDetails } = useContext(context);
+  const { recipeInProgress, setRecipeInProgress } = useContext(context);
+
   const { pathname } = window.location;
   const regex = /\d+/g;
   const id = pathname.match(regex);
-  console.log(id);
-  // const { params } = match;
-  // const { id } = params;
+  let ingredients = [];
+  let measure = [];
   const drinksPage = pathname.includes('/drinks');
+
+  useEffect(() => {
+    const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
+    const fetchRecipes = async () => {
+      setRecipeInProgress(await getRecipesById(type, id));
+    };
+    fetchRecipes();
+  }, []);
+  // página de drinks a ser renderizada se drinksPage retornar true;
   const drinkProgressPage = () => {
-    const drinkInfo = drinkDetails;
-    console.log(drinkDetails);
+    Object.entries(recipeInProgress).forEach((property) => {
+      if (property[0].startsWith('strIngredient') && property[1]) {
+        ingredients = [...ingredients, property[1]];
+      }
+      if (property[0].startsWith('strMeasure') && property[1]) {
+        measure = [...measure, property[1]];
+      }
+    });
+    console.log(ingredients);
     return (
       <div>
-        <div key={ drinkInfo.strCategory }>
+        <div key={ recipeInProgress.strDrink }>
           <button
             name="share-button"
             data-testid="share-btn"
@@ -31,35 +48,74 @@ function RecipeInProgress() {
           >
             Favoritar
           </button>
-          <h3 data-testid="recipe-category">{drinkInfo.strCategory}</h3>
-          <h1 data-testid="recipe-title">{drinkInfo.strDrink}</h1>
+          <h1 data-testid="recipe-title">
+            Nome:
+            {' '}
+            {recipeInProgress.strDrink}
+
+          </h1>
+          <h3 data-testid="recipe-category">
+            Categoria:
+            {' '}
+            {recipeInProgress.strCategory}
+          </h3>
           <img
-            alt={ drinkInfo.strDrink }
-            src={ drinkInfo.strMealThumb }
             data-testid="recipe-photo"
+            alt={ recipeInProgress.strDrink }
+            src={ recipeInProgress.strDrinkThumb }
           />
-          <p data-testid="instructions">{drinkInfo.strInstructions}</p>
-          <button
-            name="finish-button"
-            data-testid="finish-recipe-btn"
-          >
-            Finalizar
-          </button>
+          <p data-testid="instructions">
+            Modo de preparo:
+            {' '}
+            {recipeInProgress.strInstructions}
+          </p>
+          <h3>Ingredientes</h3>
+          <ul>
+            {ingredients.map((ingredient, index) => (
+              <li key={ index }>
+                <div className="checkBoxItens">
+                  {' '}
+                  <label data-testid={ `${index}-ingredient-step` }>
+                    {`${ingredient} -
+                          ${measure[index] ? measure[index] : ''}`}
+                    <input
+                      type="checkbox"
+                      key={ index }
+                      value={ ingredient }
+                      onChange={ () => handleOnChange(index) }
+                    />
+                  </label>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
+        <button
+          name="finish-button"
+          data-testid="finish-recipe-btn"
+        >
+          Finalizar
+        </button>
       </div>
     );
   };
+  // página de meals a ser renderizada se drinksPage retornar false;
   const mealProgressPage = () => {
-    const mealInfo = mealsDetails;
-    console.log(mealsDetails);
+    Object.entries(recipeInProgress).forEach((property) => {
+      if (property[0].startsWith('strIngredient') && property[1]) {
+        ingredients = [...ingredients, property[1]];
+      }
+      if (property[0].startsWith('strMeasure') && property[1]) {
+        measure = [...measure, property[1]];
+      }
+    });
 
     return (
       <div>
-        <div key={ mealInfo.strCategory }>
+        <div key={ recipeInProgress.strMeal }>
           <button
             name="share-button"
             data-testid="share-btn"
-            // onClick={}
           >
             Compartilhar
 
@@ -70,14 +126,49 @@ function RecipeInProgress() {
           >
             Favoritar
           </button>
-          <h3 data-testid="recipe-category">{mealInfo.strCategory}</h3>
-          <h1 data-testid="recipe-title">{mealInfo.strDrink}</h1>
+          <h1 data-testid="recipe-title">
+            Nome:
+            {' '}
+            {recipeInProgress.strMeal}
+
+          </h1>
+          <h3 data-testid="recipe-category">
+            Categoria:
+            {' '}
+            {recipeInProgress.strCategory}
+          </h3>
           <img
-            alt={ mealInfo.strDrink }
-            src={ mealInfo.strMealThumb }
             data-testid="recipe-photo"
+            alt={ recipeInProgress.strMeal }
+            src={ recipeInProgress.strMealThumb }
           />
-          <p data-testid="instructions">{mealInfo.strInstructions}</p>
+          <p data-testid="instructions">
+            Modo de preparo:
+            {' '}
+            {recipeInProgress.strInstructions}
+          </p>
+          <h3>Ingredientes</h3>
+          <ul>
+            {ingredients.map((ingredient, index) => (
+              <li key={ index }>
+                <div className="toppings-list-item">
+                  <div className="checkBoxItens">
+                    {' '}
+                    <label data-testid={ `${index}-ingredient-step` }>
+                      {`${ingredient} -
+                          ${measure[index] ? measure[index] : ''}`}
+                      <input
+                        type="checkbox"
+                        key={ index }
+                        value={ ingredient }
+                        onChange={ () => handleOnChange(index) }
+                      />
+                    </label>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
           <button
             name="finish-button"
             data-testid="finish-recipe-btn"
