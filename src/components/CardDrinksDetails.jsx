@@ -1,17 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import clipboardCopy from 'clipboard-copy';
 import context from '../context/Context';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export default function CardDrinksDetails() {
-  const { drinkDetails, mealsData, isCopy, setIsCopy, saveId } = useContext(context);
+  const { drinkDetails,
+    mealsData,
+    isCopy,
+    setIsCopy, saveId, isDrinkFavorited, setIsDrinkFavorited } = useContext(context);
   const { meals } = mealsData;
+  const { idDrink, strCategory, strAlcoholic, strDrink, strDrinkThumb } = drinkDetails;
   const maxCards = 6;
   let ingredients = [];
   let measure = [];
+  const alreadyFavorite = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
 
   Object.entries(drinkDetails).forEach((property) => {
     if (property[0].startsWith('strIngredient') && property[1]) {
@@ -25,6 +31,34 @@ export default function CardDrinksDetails() {
   const handleShare = (id) => {
     clipboardCopy(`http://localhost:3000/drinks/${id}`);
     setIsCopy(true);
+  };
+
+  useEffect(() => {
+    const { pathname } = window.location;
+    const id = pathname.replace('/drinks/', '');
+    if (alreadyFavorite.some((favorite) => favorite.id === id)) {
+      setIsDrinkFavorited(!isDrinkFavorited);
+    }
+  }, []);
+
+  const saveOnLocalStorage = () => {
+    const drinkFavorite = {
+      id: idDrink,
+      type: 'drink',
+      nationality: '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic,
+      name: strDrink,
+      image: strDrinkThumb,
+    };
+    alreadyFavorite.push(drinkFavorite);
+    if (alreadyFavorite) {
+      localStorage
+        .setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+      setIsDrinkFavorited(!isDrinkFavorited);
+      console.log('cai');
+    } localStorage.setItem('favoriteRecipes', JSON.stringify(alreadyFavorite));
+    setIsDrinkFavorited(!isDrinkFavorited);
   };
 
   return (
@@ -47,8 +81,10 @@ export default function CardDrinksDetails() {
       ))}
       <span data-testid="instructions">{ drinkDetails.strInstructions }</span>
       <br />
-      <button type="button" data-testid="favorite-btn">
-        <img src={ whiteHeartIcon } alt="fav icon" />
+      <button type="button" onClick={ saveOnLocalStorage }>
+        { isDrinkFavorited
+          ? <img src={ blackHeartIcon } alt="fav icon" data-testid="favorite-btn" />
+          : <img src={ whiteHeartIcon } alt="fav icon" data-testid="favorite-btn" />}
       </button>
       {' '}
       <button type="button" data-testid="share-btn" onClick={ () => handleShare(saveId) }>

@@ -11,6 +11,8 @@ function Provider({ children }) {
   const [mealsDetails, setMealsDetails] = useState([]);
   const [saveId, setSaveId] = useState('');
   const [isCopy, setIsCopy] = useState(false);
+  const [isDrinkFavorited, setIsDrinkFavorited] = useState(false);
+  const [isMealFavorited, setIsMealFavorited] = useState(false);
 
   // console.log(drinksData);
   // console.log(mealsData);
@@ -24,6 +26,8 @@ function Provider({ children }) {
     mealsDetails,
     saveId,
     isCopy,
+    isDrinkFavorited,
+    isMealFavorited,
     setDrinksData,
     setMealsData,
     setDrinkDetails,
@@ -32,8 +36,13 @@ function Provider({ children }) {
     setMealsCategory,
     setSaveId,
     setIsCopy,
+    setIsDrinkFavorited,
+    setIsMealFavorited,
   }), [drinksCategory,
-    mealsCategory, drinksData, mealsData, mealsDetails, drinkDetails, saveId, isCopy]);
+    mealsCategory,
+    drinksData,
+    mealsData,
+    mealsDetails, drinkDetails, saveId, isCopy, isDrinkFavorited, isMealFavorited]);
 
   return (
     <Context.Provider value={ context }>
