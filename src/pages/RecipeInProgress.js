@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import Footer from '../components/Footer';
 import { getRecipesById } from '../services/drinksAndMeals';
 import context from '../context/Context';
+import './RecipeInProgress.css';
 
 function RecipeInProgress() {
   const { recipeInProgress, setRecipeInProgress } = useContext(context);
@@ -30,7 +31,6 @@ function RecipeInProgress() {
         measure = [...measure, property[1]];
       }
     });
-    console.log(ingredients);
     return (
       <div>
         <div key={ recipeInProgress.strDrink }>
@@ -151,20 +151,18 @@ function RecipeInProgress() {
           <ul>
             {ingredients.map((ingredient, index) => (
               <li key={ index }>
-                <div className="toppings-list-item">
-                  <div className="checkBoxItens">
-                    {' '}
-                    <label data-testid={ `${index}-ingredient-step` }>
-                      {`${ingredient} -
+                <div className="checkBoxItens">
+                  {' '}
+                  <label data-testid={ `${index}-ingredient-step` }>
+                    {`${ingredient} -
                           ${measure[index] ? measure[index] : ''}`}
-                      <input
-                        type="checkbox"
-                        key={ index }
-                        value={ ingredient }
-                        onChange={ () => handleOnChange(index) }
-                      />
-                    </label>
-                  </div>
+                    <input
+                      type="checkbox"
+                      key={ index }
+                      value={ ingredient }
+                      onChange={ () => handleOnChange(index) }
+                    />
+                  </label>
                 </div>
               </li>
             ))}
