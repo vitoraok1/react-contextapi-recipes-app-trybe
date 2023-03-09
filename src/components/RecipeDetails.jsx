@@ -3,6 +3,7 @@ import { getRecipesById, getRecipes } from '../services/drinksAndMeals';
 import context from '../context/Context';
 import CardMealsDetails from './CardMealsDetails';
 import CardDrinksDetails from './CardDrinksDetails';
+import './RecipeDetails.css';
 
 export default function RecipeDetails() {
   const { setDrinkDetails,
@@ -16,19 +17,11 @@ export default function RecipeDetails() {
     const fetchRecipes = async () => {
       if (pathname.includes('/drinks')) {
         const replaceDrinks = pathname.replace('/drinks/', '');
-        // const everyDrinks = getRecipesById(type, replaceDrinks);
-        // everyDrinks.then((total) => {
-        //   setDrinkDetails(total[0]);
-        // });
         setDrinkDetails(await getRecipesById(type, replaceDrinks));
         setMealsData(await getRecipes('themealdb'));
       }
       if (pathname.includes('/meals')) {
         const replaceMeals = pathname.replace('/meals/', '');
-        // const everyMeals = getRecipesById(type, replaceMeals);
-        // everyMeals.then((total) => {
-        //   setMealsDetails(total[0]);
-        // });
         setMealsDetails(await getRecipesById(type, replaceMeals));
         setDrinksData(await getRecipes('thecocktaildb'));
       }
@@ -39,6 +32,15 @@ export default function RecipeDetails() {
     <div>
       {window.location.pathname
         .includes('/meals') ? <CardMealsDetails /> : <CardDrinksDetails />}
+      <div className="div-start-recipe-btn">
+        <button
+          type="button"
+          data-testid="start-recipe-btn"
+          className="start-recipe-btn"
+        >
+          Start Recipe
+        </button>
+      </div>
     </div>
   );
 }
