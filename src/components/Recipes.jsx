@@ -1,12 +1,36 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import context from '../context/Context';
 import CategoryButton from './CategoryButton';
+import { getRecipes, getRecipesByCategory } from '../services/drinksAndMeals';
 
 export default function Recipes() {
-  const { drinksData, mealsData } = useContext(context);
+  const { drinksData,
+    mealsData,
+    setDrinksCategory,
+    setMealsCategory,
+    setDrinksData,
+    setMealsData,
+  } = useContext(context);
   const maxCards = 12;
   const drinksPage = useRouteMatch('/drinks');
+
+  useEffect(() => {
+    const { pathname } = window.location;
+    const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
+    const fetchRecipes = async () => {
+      if (pathname.includes('/meals')) {
+        setMealsData(await getRecipes(type));
+        setMealsCategory(await getRecipesByCategory(type));
+      }
+      if (pathname.includes('/drinks')) {
+        setDrinksData(await getRecipes(type));
+        setMealsData(await getRecipes(type));
+        setDrinksCategory(await getRecipesByCategory(type));
+      }
+    };
+    fetchRecipes();
+  }, []);
 
   const drinksCard = () => {
     const drinksRecipes = drinksData.drinks;

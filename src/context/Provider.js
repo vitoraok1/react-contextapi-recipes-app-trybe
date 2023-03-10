@@ -1,40 +1,48 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
-import { getRecipes, getRecipesByCategory } from '../services/drinksAndMeals';
 
 function Provider({ children }) {
   const [drinksData, setDrinksData] = useState([]);
   const [mealsData, setMealsData] = useState([]);
   const [drinksCategory, setDrinksCategory] = useState([]);
   const [mealsCategory, setMealsCategory] = useState([]);
+  const [drinkDetails, setDrinkDetails] = useState([]);
+  const [mealsDetails, setMealsDetails] = useState([]);
+  const [saveId, setSaveId] = useState('');
+  const [isCopy, setIsCopy] = useState(false);
+  const [isDrinkFavorited, setIsDrinkFavorited] = useState(false);
+  const [isMealFavorited, setIsMealFavorited] = useState(false);
 
-  useEffect(() => {
-    const { pathname } = window.location;
-    const type = pathname === '/meals' ? 'themealdb' : 'thecocktaildb';
-
-    const fetchRecipes = async () => {
-      if (pathname === '/drinks') {
-        setDrinksData(await getRecipes(type));
-        setDrinksCategory(await getRecipesByCategory(type));
-      } else {
-        setMealsData(await getRecipes(type));
-        setMealsCategory(await getRecipesByCategory(type));
-      }
-    };
-    fetchRecipes();
-  }, []);
-
-  console.log(drinksData);
+  // console.log(drinksData);
+  // console.log(mealsData);
 
   const context = useMemo(() => ({
     drinksCategory,
     mealsCategory,
     drinksData,
     mealsData,
+    drinkDetails,
+    mealsDetails,
+    saveId,
+    isCopy,
+    isDrinkFavorited,
+    isMealFavorited,
     setDrinksData,
     setMealsData,
-  }), [drinksCategory, mealsCategory, drinksData, mealsData]);
+    setDrinkDetails,
+    setMealsDetails,
+    setDrinksCategory,
+    setMealsCategory,
+    setSaveId,
+    setIsCopy,
+    setIsDrinkFavorited,
+    setIsMealFavorited,
+  }), [drinksCategory,
+    mealsCategory,
+    drinksData,
+    mealsData,
+    mealsDetails, drinkDetails, saveId, isCopy, isDrinkFavorited, isMealFavorited]);
 
   return (
     <Context.Provider value={ context }>
