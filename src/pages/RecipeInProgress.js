@@ -13,20 +13,57 @@ function RecipeInProgress() {
   let ingredients = [];
   let measure = [];
   const drinksPage = pathname.includes('/drinks');
-  const handleClassChange = ({ target }) => {
-    if (target.checked) {
-      localStorage.setItem('checked', JSON.stringify({ drinksPage }));
-    }
-  };
+  const typeOfRecipe = pathname.includes('/drinks') ? 'drinks' : 'meals';
 
   useEffect(() => {
     const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
+
     const fetchRecipes = async () => {
       setRecipeInProgress(await getRecipesById(type, id));
     };
     fetchRecipes();
   }, []);
-  // página de drinks a ser renderizada se drinksPage retornar true;
+
+  const handleClassChange = ({ target }) => {
+    const inProgressStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const previousStorage = inProgressStorage || [];
+    const { value } = target;
+
+    if (target.checked && !inProgressStorage) {
+      if (typeOfRecipe === 'drinks') {
+        localStorage.setItem('inProgressRecipes', JSON.stringify([{
+          drinks: {
+            [id]: [value],
+          },
+          meals: {},
+        }]));
+      } else {
+        localStorage.setItem('inProgressRecipes', JSON.stringify([{
+          drinks: {},
+          meals: {
+            [id]: [value],
+          },
+        }]));
+      }
+    } else if (target.checked && inProgressStorage[0][typeOfRecipe][id]) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify([{ ...previousStorage[0],
+        [typeOfRecipe]: {
+          [id]: [...previousStorage[0][typeOfRecipe][id], value],
+        },
+      }]));
+    } else if (!target.checked && previousStorage[0][typeOfRecipe][id]
+      .some((ingredient) => ingredient === value)) {
+      const newIngredient = previousStorage[0][typeOfRecipe][id]
+        .filter((ingredient) => ingredient !== value);
+      localStorage.setItem('inProgressRecipes', JSON.stringify([{
+        [typeOfRecipe]: {
+          [id]: newIngredient,
+        },
+      }]));
+    }
+  };
+
+  // página de drinks a ser renderizada se drinksPage retornar true;\
   const drinkProgressPage = () => {
     Object.entries(recipeInProgress).forEach((property) => {
       if (property[0].startsWith('strIngredient') && property[1]) {
@@ -36,7 +73,6 @@ function RecipeInProgress() {
         measure = [...measure, property[1]];
       }
     });
-    console.log(ingredients);
 
     return (
       <div>
@@ -82,7 +118,9 @@ function RecipeInProgress() {
               <li key={ index }>
                 <div className="checkBoxItens">
                   {' '}
-                  <label data-testid={ `${index}-ingredient-step` }>
+                  <label
+                    data-testid={ `${index}-ingredient-step` }
+                  >
                     {`${ingredient} -
                           ${measure[index] ? measure[index] : ''}`}
                     <input
@@ -167,7 +205,7 @@ function RecipeInProgress() {
                       type="checkbox"
                       key={ index }
                       value={ ingredient }
-                      onChange={ () => handleOnChange(index) }
+                      onChange={ handleClassChange }
                     />
                   </label>
                 </div>
