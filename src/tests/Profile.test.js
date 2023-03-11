@@ -6,11 +6,12 @@ import ProfileComponent from '../components/ProfileComponent';
 
 describe('ProfileComponent', () => {
   it('should render user email', () => {
-    localStorage.setItem('user', 'test@test.com');
+    const emailExample = 'test@test.com';
+    localStorage.setItem('user', emailExample);
     render(<ProfileComponent />);
     const userEmail = screen.getByTestId('profile-email');
     expect(userEmail).toBeInTheDocument();
-    expect(userEmail).toHaveTextContent('test@test.com');
+    expect(userEmail).toHaveTextContent(emailExample);
     localStorage.clear();
   });
 
