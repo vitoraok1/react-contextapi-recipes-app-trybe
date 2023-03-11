@@ -8,6 +8,13 @@ export default function ProfileComponent() {
   const handleDoneRecipesClick = () => {
     history.push('/done-recipes');
   };
+  const handleFavoriteRecipesClick = () => {
+    history.push('/favorite-recipes');
+  };
+  const handleLogoutClick = () => {
+    localStorage.clear();
+    history.push('/');
+  };
 
   useEffect(() => {
     const userEmail = localStorage.getItem('user');
@@ -27,8 +34,18 @@ export default function ProfileComponent() {
       >
         Done Recipes
       </button>
-      <button data-testid="profile-favorite-btn">Favorite Recipes</button>
-      <button data-testid="profile-logout-btn">Logout</button>
+      <button
+        data-testid="profile-favorite-btn"
+        onClick={ handleFavoriteRecipesClick }
+      >
+        Favorite Recipes
+      </button>
+      <button
+        data-testid="profile-logout-btn"
+        onClick={ handleLogoutClick }
+      >
+        Logout
+      </button>
     </div>
   );
 }
