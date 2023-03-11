@@ -20,7 +20,6 @@ export default function ProfileComponent() {
     const userEmail = localStorage.getItem('user');
     setEmail(userEmail);
   }, []);
-  console.log(email);
 
   return (
     <div>
