@@ -12,7 +12,7 @@ export default function CardMealsDetails() {
   const maxCards = 6;
   let ingredients = [];
   let measure = [];
-console.log(mealsDetails);
+
   Object.entries(mealsDetails).forEach((property) => {
     if (property[0].startsWith('strIngredient') && property[1]) {
       ingredients = [...ingredients, property[1]];

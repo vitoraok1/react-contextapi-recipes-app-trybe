@@ -36,6 +36,11 @@ function DoneRecipes() {
     setDoneRecipesFilter(doneRecipes);
     console.log('ALL');
   };
+
+  const handleShare = () => {
+    clipboardCopy(`http://localhost:3000/${recipes.type}s/${recipes.id}`);
+    setIsCopy(true);
+  };
   return (
     <div>
       <Header />
@@ -52,7 +57,7 @@ function DoneRecipes() {
         Meals
       </button>
       <button
-        data-testid="filter-by-meal-btn"
+        data-testid="filter-by-drink-btn"
         onClick={ doneDrinks }
       >
         Drinks
@@ -78,27 +83,23 @@ function DoneRecipes() {
               : recipes.alcoholicOrNot }
 
           </h4>
+          <button
+            type="button"
+            data-testid={ `${index}-horizontal-share-btn` }
+            onClick={ handleShare }
+          >
+            <img src={ shareIcon } alt="share icon" />
+          </button>
+          { isCopy ? <span>Link copied!</span> : null}
           <h4 data-testid={ `${index}-horizontal-done-date` }>
             Concluída em:
             {' '}
             {recipes.doneDate}
           </h4>
-          <tag data-testid={ `${index}-${recipes.tags}-horizontal-tag` }>
-            {recipes.tags}
-          </tag>
-
-          <button
-            type="button"
-            data-testid={ `${index}-horizontal-share-btn` }
-            onClick={ () => {
-              clipboardCopy(`http://localhost:3000/${recipes.type}s/${recipes.id}`);
-              setIsCopy(true);
-            } }
-
-          >
-            <img src={ shareIcon } alt="share icon" />
-          </button>
-          { isCopy ? <span>Link copied!</span> : null}
+          {recipes.tags.map((tag, index2) => (
+            <p key={ index2 } data-testid={ `${index}-${tag}-horizontal-tag` }>
+              {tag}
+            </p>))}
         </div>
       ))}
       <Footer />
