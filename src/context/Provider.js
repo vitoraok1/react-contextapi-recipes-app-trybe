@@ -16,6 +16,8 @@ function Provider({ children }) {
   const [isMealFavorited, setIsMealFavorited] = useState(false);
   const [
     ingredientsChecked, setIngredientsChecked] = useState([]);
+  const [doneRecipes, setDoneRecipes] = useState([]);
+  const [doneRecipesFilter, setDoneRecipesFilter] = useState([]);
 
   const context = useMemo(() => ({
     drinksCategory,
@@ -30,6 +32,8 @@ function Provider({ children }) {
     isDrinkFavorited,
     isMealFavorited,
     ingredientsChecked,
+    doneRecipes,
+    doneRecipesFilter,
     setDrinksData,
     setMealsData,
     setDrinkDetails,
@@ -42,6 +46,8 @@ function Provider({ children }) {
     setIsDrinkFavorited,
     setIsMealFavorited,
     setIngredientsChecked,
+    setDoneRecipes,
+    setDoneRecipesFilter,
   }), [drinksCategory,
     mealsCategory,
     drinksData,
@@ -51,7 +57,11 @@ function Provider({ children }) {
     saveId,
     isCopy,
     isDrinkFavorited,
-    recipeInProgress, isMealFavorited, ingredientsChecked]);
+    recipeInProgress,
+    isMealFavorited,
+    ingredientsChecked,
+    doneRecipes,
+    doneRecipesFilter]);
 
   return (
     <Context.Provider value={ context }>
