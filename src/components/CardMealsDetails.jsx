@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { Carousel } from 'react-responsive-carousel';
 import clipboardCopy from 'clipboard-copy';
+import { useLocation } from 'react-router-dom';
 import context from '../context/Context';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -15,6 +16,7 @@ export default function CardDrinksDetails() {
     setIsCopy, saveId, isMealFavorited, setIsMealFavorited } = useContext(context);
   const { drinks } = drinksData;
   const { idMeal, strCategory, strMeal, strMealThumb, strArea } = mealsDetails;
+  const { pathname } = useLocation();
   const maxCards = 6;
   let ingredients = [];
   let measure = [];
@@ -35,7 +37,6 @@ export default function CardDrinksDetails() {
   };
 
   useEffect(() => {
-    const { pathname } = window.location;
     const id = pathname.replace('/meals/', '');
     if (alreadyFavorite.some((favorite) => favorite.id === id)) {
       setIsMealFavorited(!isMealFavorited);
@@ -43,7 +44,6 @@ export default function CardDrinksDetails() {
   }, []);
 
   const saveOnLocalStorage = () => {
-    const { pathname } = window.location;
     const id = pathname.replace('/meals/', '');
     const mealFavorite = {
       id: idMeal,

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { getRecipesById } from '../services/drinksAndMeals';
 import context from '../context/Context';
@@ -10,7 +11,7 @@ function RecipeInProgress() {
   const { setRecipeInProgress,
     setIngredientsChecked } = useContext(context);
 
-  const { pathname } = window.location;
+  const { pathname } = useLocation();
   const regex = /\d+/g;
   const id = pathname.match(regex);
   const drinksPage = pathname.includes('/drinks');

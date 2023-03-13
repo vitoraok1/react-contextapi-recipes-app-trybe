@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getRecipesById, getRecipes } from '../services/drinksAndMeals';
 import context from '../context/Context';
-import CardMealsDetails from './CardMealsDetails';
-import CardDrinksDetails from './CardDrinksDetails';
-import StartRecipeButton from './StartRecipeButton';
+import CardMealsDetails from '../components/CardMealsDetails';
+import CardDrinksDetails from '../components/CardDrinksDetails';
+import StartRecipeButton from '../components/StartRecipeButton';
 import './RecipeDetails.css';
 
 export default function RecipeDetails() {
@@ -13,8 +14,9 @@ export default function RecipeDetails() {
     setMealsData,
     setSaveId } = useContext(context);
 
+  const { pathname } = useLocation();
+
   useEffect(() => {
-    const { pathname } = window.location;
     const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
     const fetchRecipes = async () => {
       if (pathname.includes('/drinks')) {
@@ -35,7 +37,7 @@ export default function RecipeDetails() {
 
   return (
     <div>
-      {window.location.pathname
+      {pathname
         .includes('/meals') ? (
           <div>
             <CardMealsDetails />

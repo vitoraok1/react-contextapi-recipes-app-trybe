@@ -1,8 +1,9 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 export default function StartRecipeButton() {
   const history = useHistory();
+  const { pathname } = useLocation();
 
   return (
     <div className="div-start-recipe-btn">
@@ -10,7 +11,7 @@ export default function StartRecipeButton() {
         type="button"
         data-testid="start-recipe-btn"
         className="start-recipe-btn"
-        onClick={ () => history.push(`${window.location.pathname}/in-progress`) }
+        onClick={ () => history.push(`${pathname}/in-progress`) }
       >
         Start Recipe
       </button>

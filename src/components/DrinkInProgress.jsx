@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import context from '../context/Context';
 
@@ -6,7 +7,7 @@ function DrinkInProgress({ handleClassChange }) {
   const { recipeInProgress, ingredientsChecked } = useContext(context);
   let ingredients = [];
   let measure = [];
-  const { pathname } = window.location;
+  const { pathname } = useLocation();
   const regex = /\d+/g;
   const id = pathname.match(regex);
   const typeOfRecipe = pathname.includes('/drinks') ? 'drinks' : 'meals';
