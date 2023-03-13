@@ -1,15 +1,21 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import context from '../context/Context';
+import FavoriteButtonMeal from './FavoriteButtonMeal';
+import ShareButton from './ShareButton';
 
 function MealInProgress({ handleClassChange }) {
   const { recipeInProgress, ingredientsChecked } = useContext(context);
   let ingredients = [];
   let measure = [];
+  const history = useHistory();
   const { pathname } = window.location;
-  const regex = /\d+/g;
-  const id = pathname.match(regex);
-  const typeOfRecipe = pathname.includes('/drinks') ? 'drinks' : 'meals';
+  const inProgress = pathname.replace('/in-progress', '');
+  const id = inProgress.replace('/meals/', '');
+  const typeOfRecipe = inProgress.includes('/drinks') ? 'drinks' : 'meals';
+  const storage = JSON.parse(localStorage
+    .getItem('inProgressRecipes')) || [{ drinks: {}, meals: {} }];
 
   Object.entries(recipeInProgress).forEach((property) => {
     if (property[0].startsWith('strIngredient') && property[1]) {
@@ -23,19 +29,9 @@ function MealInProgress({ handleClassChange }) {
   return (
     <div>
       <div key={ recipeInProgress.strMeal }>
-        <button
-          name="share-button"
-          data-testid="share-btn"
-        >
-          Compartilhar
-
-        </button>
-        <button
-          name="favorite-button"
-          data-testid="favorite-btn"
-        >
-          Favoritar
-        </button>
+        <FavoriteButtonMeal />
+        {' '}
+        <ShareButton />
         <h1 data-testid="recipe-title">
           Nome:
           {' '}
@@ -84,12 +80,19 @@ function MealInProgress({ handleClassChange }) {
             </li>
           ))}
         </ul>
-        <button
-          name="finish-button"
-          data-testid="finish-recipe-btn"
-        >
-          Finalizar
-        </button>
+        <div className="div-start-recipe-btn">
+          <button
+            type="button"
+            data-testid="finish-recipe-btn"
+            className="start-recipe-btn"
+            disabled="true"
+            // disabled={ !(storage[0][typeOfRecipe][id]
+            //   .every((ingredient, index) => (ingredient === ingredients[index]))) }
+            onClick={ () => history.push('/done-recipes') }
+          >
+            Finish Recipe
+          </button>
+        </div>
       </div>
     </div>
   );

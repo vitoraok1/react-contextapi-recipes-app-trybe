@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import Footer from '../components/Footer';
-import { getRecipesById } from '../services/drinksAndMeals';
+import { getRecipesById, getRecipes } from '../services/drinksAndMeals';
 import context from '../context/Context';
 import DrinkInProgress from '../components/DrinkInProgress';
 import MealInProgress from '../components/MealInProgress';
@@ -8,24 +8,51 @@ import './RecipeInProgress.css';
 
 function RecipeInProgress() {
   const { setRecipeInProgress,
-    setIngredientsChecked } = useContext(context);
-
+    setIngredientsChecked,
+    setMealsDetails,
+    setDrinksData,
+    setDrinkDetails,
+    setSaveId,
+    setMealsData, setIsDrinkFavorited, setIsMealFavorited } = useContext(context);
   const { pathname } = window.location;
+  const inProgress = pathname.replace('/in-progress', '');
   const regex = /\d+/g;
-  const id = pathname.match(regex);
-  const drinksPage = pathname.includes('/drinks');
-  const typeOfRecipe = pathname.includes('/drinks') ? 'drinks' : 'meals';
+  const regexId = inProgress.match(regex);
+  const id = regexId.shift();
+  const drinksPage = inProgress.includes('/drinks');
+  const typeOfRecipe = inProgress.includes('/drinks') ? 'drinks' : 'meals';
+  const alreadyFavorite = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
 
   useEffect(() => {
-    const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
+    const type = inProgress.includes('/meals') ? 'themealdb' : 'thecocktaildb';
     const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
     if (storage) setIngredientsChecked(storage);
     if (!storage) setIngredientsChecked([{ drinks: {}, meals: {} }]);
-
+    if (alreadyFavorite.some((favorite) => favorite.id === id)) {
+      if (inProgress.includes('/drinks')) {
+        setIsDrinkFavorited(true);
+      }
+      setIsMealFavorited(true);
+    }
     const fetchRecipes = async () => {
       setRecipeInProgress(await getRecipesById(type, id));
     };
+    const fetchRecipesDetails = async () => {
+      if (inProgress.includes('/drinks')) {
+        const replaceDrinks = inProgress.replace('/drinks/', '');
+        setDrinkDetails(await getRecipesById(type, replaceDrinks));
+        setMealsData(await getRecipes('themealdb'));
+        setSaveId(replaceDrinks);
+      }
+      if (inProgress.includes('/meals')) {
+        const replaceMeals = inProgress.replace('/meals/', '');
+        setMealsDetails(await getRecipesById(type, replaceMeals));
+        setDrinksData(await getRecipes('thecocktaildb'));
+        setSaveId(replaceMeals);
+      }
+    };
     fetchRecipes();
+    fetchRecipesDetails();
   }, []);
 
   const handleClassChange = ({ target }) => {
