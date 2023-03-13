@@ -68,7 +68,6 @@ function DoneRecipes() {
             Nome:
             {' '}
             {recipes.name}
-
           </h3>
           <Link to={ `/${recipes.type}s/${recipes.id}` }>
             <img
