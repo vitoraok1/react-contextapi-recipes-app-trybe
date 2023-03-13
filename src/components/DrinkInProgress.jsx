@@ -25,7 +25,6 @@ function DrinkInProgress({ handleClassChange }) {
       measure = [...measure, property[1]];
     }
   });
-
   return (
     <div>
       <div key={ recipeInProgress.strDrink }>
@@ -86,9 +85,9 @@ function DrinkInProgress({ handleClassChange }) {
           type="button"
           data-testid="finish-recipe-btn"
           className="start-recipe-btn"
-          disabled="true"
-          // disabled={ !(storage[0][typeOfRecipe][id]
-          //   .every((ingredient, index) => (ingredient === ingredients[index]))) }
+          disabled={ storage[0][typeOfRecipe][id]
+            && storage[0][typeOfRecipe][id].sort()
+              .every((ingredient, index) => (ingredient === ingredients.sort()[index])) }
           onClick={ () => history.push('/done-recipes') }
         >
           Finish Recipe

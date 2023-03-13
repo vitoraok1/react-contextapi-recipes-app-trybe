@@ -11,7 +11,7 @@ export default function RecipeDetails() {
     setMealsDetails,
     setDrinksData,
     setMealsData,
-    setSaveId, setIsDrinkFavorited, setIsMealFavorited, drinkDetails } = useContext(context);
+    setSaveId, setIsDrinkFavorited, setIsMealFavorited } = useContext(context);
   const alreadyFavorite = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
 
   useEffect(() => {

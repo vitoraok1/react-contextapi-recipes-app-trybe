@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 export default function StartRecipeButton() {
   const history = useHistory();
   const storage = JSON.parse(localStorage
-    .getItem('inProgressRecipes')) || [{ drinks: { }, meals: { } }];
+    .getItem('inProgressRecipes')) || [{ drinks: { 0: [] }, meals: { 0: [] } }];
   const { pathname } = window.location;
   const regex = /\d+/g;
   const regexId = pathname.match(regex);
@@ -19,7 +19,8 @@ export default function StartRecipeButton() {
         className="start-recipe-btn"
         onClick={ () => history.push(`${window.location.pathname}/in-progress`) }
       >
-        {(Object.keys(storage[0][typeOfRecipe]).includes(id))
+        {Object.keys(storage[0][typeOfRecipe])
+        && Object.keys(storage[0][typeOfRecipe]).includes(id)
           ? 'Continue Recipe' : 'Start Recipe'}
       </button>
     </div>

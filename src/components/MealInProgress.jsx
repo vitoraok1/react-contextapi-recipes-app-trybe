@@ -85,7 +85,6 @@ function MealInProgress({ handleClassChange }) {
             type="button"
             data-testid="finish-recipe-btn"
             className="start-recipe-btn"
-            disabled="true"
             // disabled={ !(storage[0][typeOfRecipe][id]
             //   .every((ingredient, index) => (ingredient === ingredients[index]))) }
             onClick={ () => history.push('/done-recipes') }
