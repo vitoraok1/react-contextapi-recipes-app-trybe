@@ -1,10 +1,11 @@
 import React, { useEffect, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getRecipesById, getRecipes } from '../services/drinksAndMeals';
 import context from '../context/Context';
-import CardMealsDetails from './CardMealsDetails';
-import CardDrinksDetails from './CardDrinksDetails';
+import CardMealsDetails from '../components/CardMealsDetails';
+import CardDrinksDetails from '../components/CardDrinksDetails';
 import './RecipeDetails.css';
-import StartRecipeButton from './StartRecipeButton';
+import StartRecipeButton from '../components/StartRecipeButton';
 
 export default function RecipeDetails() {
   const { setDrinkDetails,
@@ -13,9 +14,9 @@ export default function RecipeDetails() {
     setMealsData,
     setSaveId, setIsDrinkFavorited, setIsMealFavorited } = useContext(context);
   const alreadyFavorite = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    const { pathname } = window.location;
     const regex = /\d+/g;
     const regexId = pathname.match(regex);
     const id = regexId.shift();
@@ -45,16 +46,15 @@ export default function RecipeDetails() {
 
   return (
     <div>
-      {window.location.pathname
-        .includes('/meals') ? (
-          <div>
-            <CardMealsDetails />
-          </div>
-        ) : (
-          <div>
-            <CardDrinksDetails />
-          </div>
-        )}
+      {pathname.includes('/meals') ? (
+        <div>
+          <CardMealsDetails />
+        </div>
+      ) : (
+        <div>
+          <CardDrinksDetails />
+        </div>
+      )}
       <StartRecipeButton />
     </div>
   );

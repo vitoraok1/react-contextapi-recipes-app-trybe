@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import context from '../context/Context';
 import FavoriteButtonMeal from './FavoriteButtonMeal';
 import ShareButton from './ShareButton';
@@ -10,7 +10,7 @@ function MealInProgress({ handleClassChange }) {
   let ingredients = [];
   let measure = [];
   const history = useHistory();
-  const { pathname } = window.location;
+  const { pathname } = useLocation();
   const inProgress = pathname.replace('/in-progress', '');
   const id = inProgress.replace('/meals/', '');
   const typeOfRecipe = inProgress.includes('/drinks') ? 'drinks' : 'meals';
@@ -85,8 +85,10 @@ function MealInProgress({ handleClassChange }) {
             type="button"
             data-testid="finish-recipe-btn"
             className="start-recipe-btn"
-            // disabled={ !(storage[0][typeOfRecipe][id]
-            //   .every((ingredient, index) => (ingredient === ingredients[index]))) }
+            disabled={ storage[0][typeOfRecipe][id]
+              && storage[0][typeOfRecipe][id].sort()
+                .every((ingredient, index) => (
+                  ingredient === ingredients.sort()[index])) }
             onClick={ () => history.push('/done-recipes') }
           >
             Finish Recipe

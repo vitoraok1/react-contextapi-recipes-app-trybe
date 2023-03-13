@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import context from '../context/Context';
@@ -7,9 +8,9 @@ export default function FavoriteButtonMeal() {
   const { mealsDetails, isMealFavorited, setIsMealFavorited } = useContext(context);
   const { idMeal, strCategory, strMeal, strMealThumb, strArea } = mealsDetails;
   const alreadyFavorite = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+  const { pathname } = useLocation();
 
   const saveOnLocalStorage = () => {
-    const { pathname } = window.location;
     const inProgress = pathname.replace('/in-progress', '');
     const id = inProgress.replace('/meals/', '');
     const mealFavorite = {

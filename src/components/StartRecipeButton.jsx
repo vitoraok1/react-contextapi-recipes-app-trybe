@@ -1,11 +1,11 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function StartRecipeButton() {
   const history = useHistory();
   const storage = JSON.parse(localStorage
     .getItem('inProgressRecipes')) || [{ drinks: { 0: [] }, meals: { 0: [] } }];
-  const { pathname } = window.location;
+  const { pathname } = useLocation();
   const regex = /\d+/g;
   const regexId = pathname.match(regex);
   const id = regexId.shift();
@@ -17,7 +17,7 @@ export default function StartRecipeButton() {
         type="button"
         data-testid="start-recipe-btn"
         className="start-recipe-btn"
-        onClick={ () => history.push(`${window.location.pathname}/in-progress`) }
+        onClick={ () => history.push(`${pathname}/in-progress`) }
       >
         {Object.keys(storage[0][typeOfRecipe])
         && Object.keys(storage[0][typeOfRecipe]).includes(id)
