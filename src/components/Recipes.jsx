@@ -17,7 +17,6 @@ export default function Recipes() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-   
     const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
     const fetchRecipes = async () => {
       if (pathname.includes('/meals')) {

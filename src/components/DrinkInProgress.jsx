@@ -6,9 +6,11 @@ import FavoriteButtonDrink from './FavoriteButtonDrink';
 import ShareButton from './ShareButton';
 
 function DrinkInProgress({ handleClassChange }) {
-  const { recipeInProgress, ingredientsChecked } = useContext(context);
+  const { recipeInProgress, ingredientsChecked, drinkDetails } = useContext(context);
+  const { idDrink, strCategory, strAlcoholic, strDrink, strDrinkThumb } = drinkDetails;
   let ingredients = [];
   let measure = [];
+  const today = new Date();
   const history = useHistory();
   const { pathname } = useLocation();
   const inProgress = pathname.replace('/in-progress', '');
@@ -25,6 +27,26 @@ function DrinkInProgress({ handleClassChange }) {
       measure = [...measure, property[1]];
     }
   });
+
+  const saveDoneRecipesOnLocalStorage = () => {
+    const alreadyDone = [];
+    const doneRecipe = {
+      id: idDrink,
+      type: 'drink',
+      nationality: '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic,
+      name: strDrink,
+      image: strDrinkThumb,
+      doneDate: today.toISOString(),
+      tags: [],
+    };
+    alreadyDone.push(doneRecipe);
+    localStorage
+      .setItem('doneRecipes', JSON.stringify(alreadyDone));
+    history.push('/done-recipes');
+  };
+
   return (
     <div>
       <div key={ recipeInProgress.strDrink }>
@@ -86,10 +108,10 @@ function DrinkInProgress({ handleClassChange }) {
           data-testid="finish-recipe-btn"
           className="start-recipe-btn"
           disabled={ storage[0][typeOfRecipe][id]
-            && storage[0][typeOfRecipe][id].sort()
+            && !(ingredients.sort()
               .every((ingredient, index) => (
-                ingredient === ingredients.sort()[index])) }
-          onClick={ () => history.push('/done-recipes') }
+                ingredient === storage[0][typeOfRecipe][id].sort()[index]))) }
+          onClick={ saveDoneRecipesOnLocalStorage }
         >
           Finish Recipe
         </button>
@@ -97,7 +119,6 @@ function DrinkInProgress({ handleClassChange }) {
     </div>
   );
 }
-
 DrinkInProgress.propTypes = {
   handleClassChange: PropTypes.func.isRequired,
 };

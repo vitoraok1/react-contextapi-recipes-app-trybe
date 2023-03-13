@@ -6,9 +6,11 @@ import FavoriteButtonMeal from './FavoriteButtonMeal';
 import ShareButton from './ShareButton';
 
 function MealInProgress({ handleClassChange }) {
-  const { recipeInProgress, ingredientsChecked } = useContext(context);
+  const { recipeInProgress, ingredientsChecked, mealsDetails } = useContext(context);
+  const { idMeal, strArea, strCategory, strMeal, strMealThumb, strTags } = mealsDetails;
   let ingredients = [];
   let measure = [];
+  const today = new Date();
   const history = useHistory();
   const { pathname } = useLocation();
   const inProgress = pathname.replace('/in-progress', '');
@@ -25,6 +27,26 @@ function MealInProgress({ handleClassChange }) {
       measure = [...measure, property[1]];
     }
   });
+
+  const saveDoneRecipesOnLocalStorage = () => {
+    const alreadyDone = [];
+    const doneRecipe = {
+      id: idMeal,
+      type: 'meal',
+      nationality: strArea,
+      category: strCategory,
+      alcoholicOrNot: '',
+      name: strMeal,
+      image: strMealThumb,
+      doneDate: today.toISOString(),
+      tags: strTags.split(','),
+    };
+    console.log(doneRecipe);
+    alreadyDone.push(doneRecipe);
+    localStorage
+      .setItem('doneRecipes', JSON.stringify(alreadyDone));
+    history.push('/done-recipes');
+  };
 
   return (
     <div>
@@ -86,10 +108,10 @@ function MealInProgress({ handleClassChange }) {
             data-testid="finish-recipe-btn"
             className="start-recipe-btn"
             disabled={ storage[0][typeOfRecipe][id]
-              && storage[0][typeOfRecipe][id].sort()
+              && !(ingredients.sort()
                 .every((ingredient, index) => (
-                  ingredient === ingredients.sort()[index])) }
-            onClick={ () => history.push('/done-recipes') }
+                  ingredient === storage[0][typeOfRecipe][id].sort()[index]))) }
+            onClick={ saveDoneRecipesOnLocalStorage }
           >
             Finish Recipe
           </button>
