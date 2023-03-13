@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import context from '../context/Context';
@@ -35,13 +36,6 @@ function DoneRecipes() {
     setDoneRecipesFilter(doneRecipes);
     console.log('ALL');
   };
-
-  const handleShare = () => {
-    const { pathname } = window.location;
-    const inProgress = pathname.replace('/in-progress', '');
-    clipboardCopy(`http://localhost:3000${inProgress}`);
-    setIsCopy(true);
-  };
   return (
     <div>
       <Header />
@@ -71,11 +65,13 @@ function DoneRecipes() {
             {recipes.name}
 
           </h3>
-          <img
-            data-testid={ `${index}-horizontal-image` }
-            alt="Imagem"
-            src={ recipes.image }
-          />
+          <Link to={ `/${recipes.type}s/${recipes.id}` }>
+            <img
+              data-testid={ `${index}-horizontal-image` }
+              alt="Imagem"
+              src={ recipes.image }
+            />
+          </Link>
           <h4 data-testid={ `${index}-horizontal-top-text` }>
             {recipes.type === 'meal'
               ? `${recipes.nationality} - ${recipes.category}`
@@ -91,16 +87,18 @@ function DoneRecipes() {
             {recipes.tags}
           </tag>
 
-          <div>
-            <button
-              type="button"
-              data-testid={ `${index}-horizontal-share-btn` }
-              onClick={ handleShare }
-            >
-              <img src={ shareIcon } alt="share icon" />
-            </button>
-            { isCopy ? <span>Link copied!</span> : null}
-          </div>
+          <button
+            type="button"
+            data-testid={ `${index}-horizontal-share-btn` }
+            onClick={ () => {
+              clipboardCopy(`http://localhost:3000/${recipes.type}s/${recipes.id}`);
+              setIsCopy(true);
+            } }
+
+          >
+            <img src={ shareIcon } alt="share icon" />
+          </button>
+          { isCopy ? <span>Link copied!</span> : null}
         </div>
       ))}
       <Footer />
