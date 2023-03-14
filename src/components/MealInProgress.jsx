@@ -55,14 +55,12 @@ function MealInProgress({ handleClassChange }) {
         {' '}
         <ShareButton />
         <h1 data-testid="recipe-title">
-          Nome:
-          {' '}
+
           {recipeInProgress.strMeal}
 
         </h1>
         <h3 data-testid="recipe-category">
-          Categoria:
-          {' '}
+
           {recipeInProgress.strCategory}
         </h3>
         <img
@@ -72,7 +70,7 @@ function MealInProgress({ handleClassChange }) {
         />
         <p data-testid="instructions">
           Modo de preparo:
-          {' '}
+          <br />
           {recipeInProgress.strInstructions}
         </p>
         <h3>Ingredientes</h3>
