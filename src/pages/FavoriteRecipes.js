@@ -1,40 +1,52 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
+import clipboardCopy from 'clipboard-copy';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import context from '../context/Context';
 import shareIcon from '../images/shareIcon.svg';
 
 function FavoriteRecipes() {
-  const { isCopy, setIsCopy } = useContext(context);
-  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
-  const [favoriteRecipesFilter, setFavoriteRecipesFilter] = useState([]);
+  const [isShared, setIsShared] = useState(false);
+  const [updateFavorite, setUpdateFavorite] = useState(false);
+  const { favoriteRecipes, setFavoriteRecipes,
+    favoriteRecipesFilter, setFavoriteRecipesFilter } = useContext(context);
+  const favoriteRecipesData = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
 
   useEffect(() => {
-    const favoriteRecipesData = JSON.parse(localStorage
-      .getItem('favoriteRecipes'));
     if (favoriteRecipesData) {
       setFavoriteRecipes(favoriteRecipesData);
       setFavoriteRecipesFilter(favoriteRecipesData);
     }
-  }, []);
+    setUpdateFavorite(false);
+  }, [updateFavorite]);
 
-  const doneDrinks = () => {
+  const favoriteDrinks = () => {
     const drinks = favoriteRecipes.filter((recipes) => recipes.type === 'drink');
     setFavoriteRecipesFilter(drinks);
   };
 
-  const doneMeals = () => {
+  const favoriteMeals = () => {
     const meals = favoriteRecipes.filter((recipes) => recipes.type === 'meal');
     setFavoriteRecipesFilter(meals);
   };
 
-  const doneAll = () => {
+  const favoriteAll = () => {
     setFavoriteRecipesFilter(favoriteRecipes);
   };
 
-  const handleShare = () => {
+  const handleShare = (recipes) => {
     clipboardCopy(`http://localhost:3000/${recipes.type}s/${recipes.id}`);
-    setIsCopy(true);
+    setIsShared(true);
+  };
+
+  const handleRemoveFavorite = (recipes) => {
+    if (favoriteRecipesData.some((favorite) => favorite.id === recipes.id)) {
+      const newFavorites = favoriteRecipesData
+        .filter((favorite) => favorite.id !== recipes.id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
+    }
+    setUpdateFavorite(true);
   };
 
   return (
@@ -42,29 +54,35 @@ function FavoriteRecipes() {
       <Header />
       <button
         data-testid="filter-by-all-btn"
-        onClick={ doneAll }
+        onClick={ favoriteAll }
       >
         All
       </button>
       <button
         data-testid="filter-by-meal-btn"
-        onClick={ doneMeals }
+        onClick={ favoriteMeals }
       >
         Meals
       </button>
       <button
         data-testid="filter-by-drink-btn"
-        onClick={ doneDrinks }
+        onClick={ favoriteDrinks }
       >
         Drinks
       </button>
-      {favoriteRecipesFilter?.map((recipes, index) => (
+      {favoriteRecipesFilter.map((recipes, index) => (
         <div key={ index }>
-          <h3 data-testid={ `${index}-horizontal-name` }>
+          <Link
+            to={ `/${recipes.type}s/${recipes.id}` }
+            data-testid={ `${index}-horizontal-name` }
+          >
+            Nome:
+            {' '}
             {recipes.name}
-          </h3>
+          </Link>
           <Link to={ `/${recipes.type}s/${recipes.id}` }>
             <img
+              width="500"
               data-testid={ `${index}-horizontal-image` }
               alt="Imagem"
               src={ recipes.image }
@@ -78,21 +96,22 @@ function FavoriteRecipes() {
           </h4>
           <button
             type="button"
-            data-testid={ `${index}-horizontal-share-btn` }
-            onClick={ handleShare }
+            onClick={ () => handleShare(recipes) }
           >
-            <img src={ shareIcon } alt="share icon" />
+            <img
+              data-testid={ `${index}-horizontal-share-btn` }
+              src={ shareIcon }
+              alt="share icon"
+            />
           </button>
-          { isCopy ? <span>Link copied!</span> : null}
-          <h4 data-testid={ `${index}-horizontal-done-date` }>
-            Concluída em:
-            {' '}
-            {recipes.doneDate}
-          </h4>
-          {recipes.tags?.map((tag, index2) => (
-            <p key={ index2 } data-testid={ `${index}-${tag}-horizontal-tag` }>
-              {tag}
-            </p>))}
+          { isShared ? <span>Link copied!</span> : null}
+          <button type="button" onClick={ () => handleRemoveFavorite(recipes) }>
+            <img
+              src={ blackHeartIcon }
+              alt="fav icon"
+              data-testid={ `${index}-horizontal-favorite-btn` }
+            />
+          </button>
         </div>
       ))}
     </div>
