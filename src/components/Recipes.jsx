@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { useRouteMatch, Link } from 'react-router-dom';
+import { useRouteMatch, Link, useLocation } from 'react-router-dom';
 import context from '../context/Context';
 import CategoryButton from './CategoryButton';
 import { getRecipes, getRecipesByCategory } from '../services/drinksAndMeals';
@@ -14,9 +14,9 @@ export default function Recipes() {
   } = useContext(context);
   const maxCards = 12;
   const drinksPage = useRouteMatch('/drinks');
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    const { pathname } = window.location;
     const type = pathname.includes('/meals') ? 'themealdb' : 'thecocktaildb';
     const fetchRecipes = async () => {
       if (pathname.includes('/meals')) {
@@ -37,7 +37,7 @@ export default function Recipes() {
 
     return (
       <div>
-        {drinksRecipes?.slice(0, maxCards).map(
+        {drinksRecipes && drinksRecipes?.slice(0, maxCards).map(
           ({ strDrink, strDrinkThumb, idDrink }, index) => (
             <div key={ index } data-testid={ `${index}-recipe-card` }>
               <Link to={ `/drinks/${idDrink}` }>
@@ -60,7 +60,7 @@ export default function Recipes() {
 
     return (
       <div>
-        {mealsRecipes?.slice(0, maxCards).map(
+        {mealsRecipes && mealsRecipes?.slice(0, maxCards).map(
           ({ strMeal, strMealThumb, idMeal }, index) => (
             <div key={ index } data-testid={ `${index}-recipe-card` }>
               <Link to={ `/meals/${idMeal}` }>

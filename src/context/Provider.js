@@ -11,11 +11,13 @@ function Provider({ children }) {
   const [mealsDetails, setMealsDetails] = useState([]);
   const [saveId, setSaveId] = useState('');
   const [isCopy, setIsCopy] = useState(false);
+  const [recipeInProgress, setRecipeInProgress] = useState([]);
   const [isDrinkFavorited, setIsDrinkFavorited] = useState(false);
   const [isMealFavorited, setIsMealFavorited] = useState(false);
-
-  // console.log(drinksData);
-  // console.log(mealsData);
+  const [
+    ingredientsChecked, setIngredientsChecked] = useState([]);
+  const [doneRecipes, setDoneRecipes] = useState([]);
+  const [doneRecipesFilter, setDoneRecipesFilter] = useState([]);
 
   const context = useMemo(() => ({
     drinksCategory,
@@ -26,8 +28,12 @@ function Provider({ children }) {
     mealsDetails,
     saveId,
     isCopy,
+    recipeInProgress,
     isDrinkFavorited,
     isMealFavorited,
+    ingredientsChecked,
+    doneRecipes,
+    doneRecipesFilter,
     setDrinksData,
     setMealsData,
     setDrinkDetails,
@@ -36,13 +42,26 @@ function Provider({ children }) {
     setMealsCategory,
     setSaveId,
     setIsCopy,
+    setRecipeInProgress,
     setIsDrinkFavorited,
     setIsMealFavorited,
+    setIngredientsChecked,
+    setDoneRecipes,
+    setDoneRecipesFilter,
   }), [drinksCategory,
     mealsCategory,
     drinksData,
     mealsData,
-    mealsDetails, drinkDetails, saveId, isCopy, isDrinkFavorited, isMealFavorited]);
+    mealsDetails,
+    drinkDetails,
+    saveId,
+    isCopy,
+    isDrinkFavorited,
+    recipeInProgress,
+    isMealFavorited,
+    ingredientsChecked,
+    doneRecipes,
+    doneRecipesFilter]);
 
   return (
     <Context.Provider value={ context }>
