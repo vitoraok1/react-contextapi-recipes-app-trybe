@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getRecipesById, getRecipes } from '../services/drinksAndMeals';
-import context from '../context/Context';
 import Footer from '../components/Footer';
+import context from '../context/Context';
 import DrinkInProgress from '../components/DrinkInProgress';
 import MealInProgress from '../components/MealInProgress';
 import './RecipeInProgress.css';

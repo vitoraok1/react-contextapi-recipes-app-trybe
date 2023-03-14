@@ -37,7 +37,7 @@ export default function Recipes() {
 
     return (
       <div>
-        {drinksRecipes?.slice(0, maxCards).map(
+        {drinksRecipes && drinksRecipes?.slice(0, maxCards).map(
           ({ strDrink, strDrinkThumb, idDrink }, index) => (
             <div key={ index } data-testid={ `${index}-recipe-card` }>
               <Link to={ `/drinks/${idDrink}` }>
@@ -60,7 +60,7 @@ export default function Recipes() {
 
     return (
       <div>
-        {mealsRecipes?.slice(0, maxCards).map(
+        {mealsRecipes && mealsRecipes?.slice(0, maxCards).map(
           ({ strMeal, strMealThumb, idMeal }, index) => (
             <div key={ index } data-testid={ `${index}-recipe-card` }>
               <Link to={ `/meals/${idMeal}` }>
