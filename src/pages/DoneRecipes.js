@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 import context from '../context/Context';
 import shareIcon from '../images/shareIcon.svg';
 
@@ -105,7 +104,6 @@ function DoneRecipes() {
             </p>))}
         </div>
       ))}
-      <Footer />
     </div>
   );
 }
