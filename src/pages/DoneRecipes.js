@@ -22,18 +22,15 @@ function DoneRecipes() {
   const doneDrinks = () => {
     const drinks = doneRecipes.filter((recipes) => recipes.type === 'drink');
     setDoneRecipesFilter(drinks);
-    console.log('Drinks');
   };
 
   const doneMeals = () => {
     const meals = doneRecipes.filter((recipes) => recipes.type === 'meal');
     setDoneRecipesFilter(meals);
-    console.log('Meals');
   };
 
   const doneAll = () => {
     setDoneRecipesFilter(doneRecipes);
-    console.log('ALL');
   };
 
   const handleShare = (recipes) => {
