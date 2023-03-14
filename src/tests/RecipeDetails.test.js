@@ -7,7 +7,7 @@ import oneMeal from '../../cypress/mocks/oneMeal';
 import oneDrink from '../../cypress/mocks/oneDrink';
 
 const favBtnId = 'favorite-btn';
-const drinkDetailsRoute = '/drinks/178319';
+const drinkDetailsRout = '/drinks/178319';
 const mealDetailsRoute = '/meals/52771';
 
 const favDrinkMock = [{
@@ -110,8 +110,7 @@ describe('1. Testes no componente CategoryButtons', () => {
       json: async () => (oneDrink),
     }));
 
-    const { history } = renderWithRouter(
-      <App />, { initialEntries: [drinkDetailsRoute] });
+    const { history } = renderWithRouter(<App />, { initialEntries: [drinkDetailsRout] });
 
     const favBtn = screen.getByTestId(favBtnId);
 
@@ -137,7 +136,7 @@ describe('1. Testes no componente CategoryButtons', () => {
 
     localStorage.setItem('favoriteRecipes', JSON.stringify(favDrinkMock));
 
-    renderWithRouter(<App />, { initialEntries: [drinkDetailsRoute] });
+    renderWithRouter(<App />, { initialEntries: [drinkDetailsRout] });
 
     expect(JSON.parse(localStorage.getItem('favoriteRecipes'))).toEqual(favDrinkMock);
 
@@ -195,7 +194,7 @@ describe('1. Testes no componente CategoryButtons', () => {
       },
     });
 
-    renderWithRouter(<App />, { initialEntries: [drinkDetailsRoute] });
+    renderWithRouter(<App />, { initialEntries: [drinkDetailsRout] });
 
     const btnShare = screen.getByTestId('share-btn');
     expect(btnShare).toBeInTheDocument();
