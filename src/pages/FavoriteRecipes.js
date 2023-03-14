@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import context from '../context/Context';
 import shareIcon from '../images/shareIcon.svg';
 
 function FavoriteRecipes() {
@@ -57,11 +58,9 @@ function FavoriteRecipes() {
       >
         Drinks
       </button>
-      {favoriteRecipesFilter.map((recipes, index) => (
+      {favoriteRecipesFilter?.map((recipes, index) => (
         <div key={ index }>
           <h3 data-testid={ `${index}-horizontal-name` }>
-            Nome:
-            {' '}
             {recipes.name}
           </h3>
           <Link to={ `/${recipes.type}s/${recipes.id}` }>
@@ -90,7 +89,7 @@ function FavoriteRecipes() {
             {' '}
             {recipes.doneDate}
           </h4>
-          {recipes.tags.map((tag, index2) => (
+          {recipes.tags?.map((tag, index2) => (
             <p key={ index2 } data-testid={ `${index}-${tag}-horizontal-tag` }>
               {tag}
             </p>))}
